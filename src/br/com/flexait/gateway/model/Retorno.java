@@ -1,8 +1,8 @@
 package br.com.flexait.gateway.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import lombok.Data;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Data
 public class Retorno {

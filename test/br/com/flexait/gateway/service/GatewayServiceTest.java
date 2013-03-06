@@ -26,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.exception.GatewayException;
+import br.com.flexait.gateway.integracao.IntegracaoTest;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
@@ -33,8 +34,6 @@ import br.com.flexait.gateway.xml.ParserTest;
 
 public class GatewayServiceTest {
 
-	
-	public static final String IDENTIFICACAO = "4291989";
 	GatewayService gatewayService;
 	Parametros params;
 	HttpResponse httpResponse;
@@ -70,7 +69,7 @@ public class GatewayServiceTest {
 		verify(paramsSpy).setModulo(Mockito.any(EModulo.class));
 		verify(paramsSpy).setAmbiente(Mockito.any(EAmbiente.class));
 		
-		assertEquals("Deve ter numero identificacao", IDENTIFICACAO, serviceSpy.getParametros().getIdentificacao());
+		assertEquals("Deve ter numero identificacao", IntegracaoTest.IDENTIFICACAO, serviceSpy.getParametros().getIdentificacao());
 		assertEquals("Deve ter numero identificacao", ParametrosTest.CIELO, serviceSpy.getParametros().getModulo());
 		assertEquals("Deve ter numero identificacao", ParametrosTest.TESTE, serviceSpy.getParametros().getAmbiente());
 	}
@@ -112,10 +111,10 @@ public class GatewayServiceTest {
 		return response;
 	}
 
-	public static GatewayService getService() {
+	private GatewayService getService() {
 		GatewayService service = GatewayService.of(
 			GatewayService.DEFAULT_URL_GATEWAY,
-			IDENTIFICACAO,
+			IntegracaoTest.IDENTIFICACAO,
 			ParametrosTest.CIELO,
 			ParametrosTest.TESTE
 		);

@@ -1,9 +1,9 @@
 package br.com.flexait.gateway.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import br.com.flexait.gateway.enums.EStatus;
 import lombok.Data;
+import br.com.flexait.gateway.enums.EStatus;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Data
 @XStreamAlias("transacao")
@@ -11,7 +11,7 @@ public class Transacao {
 	
 	private String tid; //id da transação
 	
-	private String pam;
+	private String pan;
 	
 	private EStatus status;
 	

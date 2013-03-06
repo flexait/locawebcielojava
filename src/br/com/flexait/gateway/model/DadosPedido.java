@@ -2,12 +2,12 @@ package br.com.flexait.gateway.model;
 
 import java.util.Calendar;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
-
 import lombok.Data;
 import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.xml.CalendarConverter;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 @Data
 @XStreamAlias("dados-pedido")

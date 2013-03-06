@@ -3,10 +3,10 @@ package br.com.flexait.gateway.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
-import lombok.Data;
 
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
@@ -27,7 +27,7 @@ public class Parametros {
 	private EModulo modulo;
 	private EAmbiente ambiente;
 	private EOperacao operacao;
-	private int binCartao;
+	private String binCartao;
 	private EIdioma idioma;
 	
 	//dados do pedido
@@ -44,8 +44,8 @@ public class Parametros {
 	private String nomePortadorCartao;
 	private String numeroCartao;
 	private String validadeCartao;
-	private EIdentificadorCartao identificadorCartao;
-	private int codigoSegurancaCartao;
+	private EIdentificadorCartao indicadorCartao;
+	private String codigoSegurancaCartao;
 	
 	private String tid;
 	
@@ -65,16 +65,16 @@ public class Parametros {
 			params.add(new BasicNameValuePair("modulo", modulo.toString()));
 		}
 		
-		if(ambiente != null) {
-			params.add(new BasicNameValuePair("ambiente", ambiente.toString()));
-		}
-		
 		if(operacao != null) {
 			params.add(new BasicNameValuePair("operacao", operacao.toString()));
 		}
 		
-		if(binCartao > 0) {
-			params.add(new BasicNameValuePair("bin_cartao", String.valueOf(binCartao)));
+		if(ambiente != null) {
+			params.add(new BasicNameValuePair("ambiente", ambiente.toString()));
+		}
+		
+		if(binCartao != null) {
+			params.add(new BasicNameValuePair("bin_cartao", binCartao));
 		}
 		
 		if(idioma != null) {
@@ -127,12 +127,12 @@ public class Parametros {
 			params.add(new BasicNameValuePair("validade_cartao", validadeCartao));
 		}
 		
-		if(identificadorCartao != null) {
-			params.add(new BasicNameValuePair("identificador_cartao", identificadorCartao.getValor()));
+		if(indicadorCartao != null) {
+			params.add(new BasicNameValuePair("indicador_cartao", indicadorCartao.getValor()));
 		}
 		
-		if(codigoSegurancaCartao > 0) {
-			params.add(new BasicNameValuePair("codigo_seguranca_cartao", String.valueOf(codigoSegurancaCartao)));
+		if(codigoSegurancaCartao != null) {
+			params.add(new BasicNameValuePair("codigo_seguranca_cartao", codigoSegurancaCartao));
 		}
 		
 		if(tid != null) {

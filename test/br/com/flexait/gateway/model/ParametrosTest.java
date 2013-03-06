@@ -22,6 +22,7 @@ public class ParametrosTest {
 
 	public static final EAmbiente TESTE = EAmbiente.TESTE;
 	public static final EModulo CIELO = EModulo.CIELO;
+	public static final EAmbiente PRODUCAO = EAmbiente.PRODUCAO;
 	
 	Parametros params;
 	
@@ -40,7 +41,7 @@ public class ParametrosTest {
 		params.setModulo(CIELO);
 		params.setOperacao(EOperacao.Registro);
 		params.setAmbiente(TESTE);
-		params.setBinCartao(454545);
+		params.setBinCartao("454545");
 		params.setIdioma(EIdioma.PT);
 		params.setValor(10.0);
 		params.setPedido(1L);

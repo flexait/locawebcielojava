@@ -1,9 +1,9 @@
 package br.com.flexait.gateway.model;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import br.com.flexait.gateway.enums.EBandeira;
 import lombok.Data;
+import br.com.flexait.gateway.enums.EBandeira;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @Data
 @XStreamAlias("forma-pagamento")

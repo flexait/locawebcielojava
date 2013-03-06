@@ -21,6 +21,7 @@ import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Parametros;
+import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.service.GatewayService;
 import br.com.flexait.gateway.service.GatewayServiceTest;
@@ -28,14 +29,12 @@ import br.com.flexait.gateway.service.GatewayServiceTest;
 @SuppressWarnings("unused")
 public class IntegracaoTest {
 
-	private static final int BIN_CARTAO = 545301;
 	private static final String IDENTIFICACAO_ESAB = "4291989";
-	private static final String IDENTIFICACAO = "1006993069";
+	public static final String IDENTIFICACAO = "1006993069";
 	
-	private static final String CHAVE_AUTENTICACAO = "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3";
-	private static final String NUMERO_CARTAO_MASTERCARD = "4551870000000183";
-	private static final String NUMERO_CARTAO_VISA = "5453010000066167";
-	
+	private static final String NUMERO_CARTAO_MASTERCARD = "5453010000066167";
+	private static final String NUMERO_CARTAO_VISA = "4551870000000183";
+
 	GatewayService service;
 	Parametros params;
 	
@@ -43,7 +42,7 @@ public class IntegracaoTest {
 	public void setUp() throws Exception {
 		params = getParametrosRegistro();
 		
-		service = spy(GatewayServiceTest.getService());
+		service = spy(getService());
 	}
 
 	@After
@@ -53,45 +52,68 @@ public class IntegracaoTest {
 	}
 
 	private Parametros getParametrosRegistro() {
+		String numeroCartao = NUMERO_CARTAO_MASTERCARD;
+		String bin = numeroCartao.substring(0, 6);
+		
 		Parametros params = Parametros.of();
-		params.setIdentificacao(IDENTIFICACAO);
-		params.setModulo(EModulo.CIELO);
 		params.setOperacao(EOperacao.AutorizacaoDireta);
-		params.setAmbiente(EAmbiente.TESTE);
-		params.setBinCartao(BIN_CARTAO);
+		params.setBinCartao(bin);
 		params.setIdioma(EIdioma.PT);
-		params.setValor(10.0);
+		params.setValor(1.00);
 		params.setPedido(1L);
 		params.setDescricao("Pedido de teste");
-		params.setBandeira(EBandeira.visa);
+		params.setBandeira(EBandeira.mastercard);
 		params.setFormaPagamento(EFormaPagamento.CreditoAVista);
 		params.setParcelas(1);
-		params.setAutorizar(EAutorizar.AutorizarSemPassarPorAutenticacao);
+		params.setAutorizar(EAutorizar.AutorizarAutenticadaENaoAutenticada);
 		params.setCapturar(false);
-		params.setCampoLivre("Transação de teste de integração ESAB");
+		params.setCampoLivre("Transacao de teste de integracao ESAB");
 		
-		params.setNomePortadorCartao("NOME PORTADOR");
-		params.setNumeroCartao(NUMERO_CARTAO_VISA);
-		params.setValidadeCartao("201512");
-		params.setIdentificadorCartao(EIdentificadorCartao.Informado);
-		params.setCodigoSegurancaCartao(555);
+		params.setNomePortadorCartao("INTEGRACAO TESTE");
+		params.setNumeroCartao(numeroCartao);
+		params.setValidadeCartao("201712");
+		params.setIndicadorCartao(EIdentificadorCartao.Informado);
+		params.setCodigoSegurancaCartao("034");
+		params.setTid("10069930690CDF4F1001");
 		
 		return params;
 	}
 	
 	@Test
-	public void deveRegistrarTransacao() throws Exception {
-		System.out.println(params.getHttpParameters());
-		
+	public void deveAutorizarDiretamenteTransacao() throws Exception {
+		params.setOperacao(EOperacao.AutorizacaoDireta);
 		Retorno retorno = service.post(params);
 		
-		System.out.println(retorno);
+		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 		
 		verify(service).configScheme(Mockito.any(HttpClient.class));
+	}
+	
+	@Test
+	public void deveCancelarTransacao() throws Exception {
+		params.setOperacao(EOperacao.Cancelamento);
+		Retorno retorno = service.post(params);
+		
+		assertNotNull("Deve retornar transação com erro devido aos dados do servidor", retorno.getErro());
+	}
+	
+	@Test
+	public void deveConsultaTransacao() throws Exception {
+		params.setOperacao(EOperacao.Consulta);
+		Retorno retorno = service.post(params);
 		
 		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 	}
 	
-	
+	private static GatewayService getService() {
+		GatewayService service = GatewayService.of(
+			GatewayService.DEFAULT_URL_GATEWAY,
+			IntegracaoTest.IDENTIFICACAO_ESAB,
+			ParametrosTest.CIELO,
+			ParametrosTest.TESTE
+		);
+		
+		return service;
+	}
 
 }

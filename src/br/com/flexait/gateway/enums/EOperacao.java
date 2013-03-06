@@ -6,7 +6,8 @@ public enum EOperacao {
 	Captura("Captura"), 
 	Consulta("Consulta"), 
 	Autorizacao("Autorizacao"),
-	AutorizacaoDireta("Autorizacao-Direta");
+	AutorizacaoDireta("Autorizacao-Direta"),
+	Cancelamento("Cancelamento");
 	
 	private String valor;
 	

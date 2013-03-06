@@ -3,10 +3,13 @@ package br.com.flexait.gateway.xml;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
+
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.model.Transacao;
+import br.com.flexait.gateway.service.GatewayService;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -28,16 +31,20 @@ public class Parser {
 		return new Parser(is);
 	}
 	
-	protected Object toObject() {
+	protected Object toObject() throws Exception {
 		
 		xstream.autodetectAnnotations(true);
 		xstream.processAnnotations(Transacao.class);
 		xstream.processAnnotations(Erro.class);
 		
-		return xstream.fromXML(is);
+		String toString = IOUtils.toString(is, "ISO-8859-1");
+		
+		GatewayService.log.debug("\nXML de resposta:\n" + toString);
+		
+		return xstream.fromXML(toString);
 	}
 
-	public Retorno getRetorno() throws GatewayException {
+	public Retorno getRetorno() throws Exception {
 		Object object = toObject();
 		
 		Transacao transacao = null;

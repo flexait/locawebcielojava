@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EModulo;
@@ -38,6 +39,9 @@ import br.com.flexait.gateway.xml.Parser;
 public class GatewayService {
 
 	public static final String DEFAULT_URL_GATEWAY = "https://comercio.locaweb.com.br/comercio.comp";
+	
+	public static Logger log = Logger.getLogger(GatewayService.class.getSimpleName());
+	
 	private String url;
 	private final String identificacao;
 	private final EModulo modulo;
@@ -74,6 +78,14 @@ public class GatewayService {
 		this.identificacao = identificacao;
 		this.modulo = modulo;
 		this.ambiente = ambiente;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("Service instanciado:");
+		sb.append("\n\tURL = " + url);
+		sb.append("\n\tIdentificacao = " + identificacao);
+		sb.append("\n\tAmbiente = " + ambiente);
+		log.debug("\n=====================================================================================================\n");
+		log.debug(sb.toString());
 	}
 	
 	/**
@@ -126,10 +138,11 @@ public class GatewayService {
 		
 			httpClient = configScheme(httpClient);
 			
+			log.debug("Post com os parametros:\n\t" + IOUtils.toString(httpPost.getEntity().getContent()));
+			
 			HttpResponse response = httpClient.execute(httpPost);
 			
 			InputStream content = response.getEntity().getContent();
-			System.out.println(IOUtils.toString(content));
 			
 			return Parser.of(content).getRetorno();
 			
