@@ -82,7 +82,9 @@ public class IntegracaoTest {
 	public void deveRegistrarTransacao() throws GatewayException {
 		Retorno retorno = service.post(params);
 		
-		assertNotNull(retorno);
+		assertNotNull(retorno.getTransacao());
+		
+		verify
 //		assertEquals("Deve retornar transação sem erro", retorno.getTransacao().getStatus(), EStatus.Criada);
 	}
 	

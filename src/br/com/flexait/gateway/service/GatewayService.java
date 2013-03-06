@@ -1,6 +1,15 @@
 package br.com.flexait.gateway.service;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -12,6 +21,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import br.com.flexait.gateway.enums.EAmbiente;
@@ -56,6 +67,7 @@ public class GatewayService {
 			EAmbiente ambiente) {
 		super();
 		this.httpClient = new DefaultHttpClient();
+		
 		this.setUrl(url);
 		this.identificacao = identificacao;
 		this.modulo = modulo;
@@ -109,13 +121,51 @@ public class GatewayService {
 	public Retorno post(Parametros params) throws GatewayException {
 		try {
 			setParametros(params);
+		
+			httpClient = configScheme(httpClient);
 			
 			HttpResponse response = httpClient.execute(httpPost);
 			
 			return Parser.of(response.getEntity().getContent()).getRetorno();
+			
 		} catch (Exception e) {
 			throw new GatewayException("Ocorreu um problema ao executar o post", e);
 		}
+	}
+
+	protected static Scheme getShema() throws NoSuchAlgorithmException,
+			KeyManagementException {
+		SSLContext sslContext = SSLContext.getInstance("SSL");
+		sslContext.init(
+			null, 
+			new TrustManager[] {
+				new X509TrustManager() {
+					
+					public X509Certificate[] getAcceptedIssuers() {
+						return null;
+					}
+					
+					public void checkServerTrusted(X509Certificate[] arg0, String arg1)
+							throws CertificateException {
+					}
+					
+					public void checkClientTrusted(X509Certificate[] arg0, String arg1)
+							throws CertificateException {
+					}
+				}
+			},
+			new SecureRandom()
+		);
+		
+		SSLSocketFactory factory = new SSLSocketFactory(sslContext);
+		Scheme sch = new Scheme("https", 443, factory);
+		return sch;
+	}
+
+	protected HttpClient configScheme(HttpClient httpClient) throws Exception {
+		Scheme sch = getShema();
+		httpClient.getConnectionManager().getSchemeRegistry().register(sch);
+		return httpClient;
 	}
 	
 }

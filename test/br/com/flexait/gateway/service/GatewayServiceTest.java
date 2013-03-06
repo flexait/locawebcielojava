@@ -2,6 +2,7 @@ package br.com.flexait.gateway.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -87,8 +88,10 @@ public class GatewayServiceTest {
 				gatewayService.getHttpPost().getURI().getHost());
 	}
 	
-	@Test public void deveExecutarPost() throws GatewayException {
+	@Test public void deveExecutarPost() throws GatewayException, Exception {
 		gatewayService = spy(gatewayService);
+		
+		doReturn(httpClient).when(gatewayService).configScheme(Mockito.any(HttpClient.class));
 		
 		Retorno retorno = gatewayService.post(params);
 		assertNotNull("Deve retornar objeto deserializado", retorno.getTransacao());

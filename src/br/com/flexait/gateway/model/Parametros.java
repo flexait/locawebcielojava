@@ -3,10 +3,10 @@ package br.com.flexait.gateway.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Data;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import lombok.Data;
 
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
