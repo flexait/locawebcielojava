@@ -13,8 +13,8 @@ public enum EAutorizar {
 		this.valor = valor;
 	}
 	
-	public int getValor() {
-		return valor;
+	public String getValor() {
+		return String.valueOf(valor);
 	}
 	
 }

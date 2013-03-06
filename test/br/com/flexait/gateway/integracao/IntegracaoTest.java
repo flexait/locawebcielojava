@@ -10,6 +10,7 @@ import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
 import br.com.flexait.gateway.enums.EFormaPagamento;
+import br.com.flexait.gateway.enums.EIdentificadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
@@ -21,7 +22,8 @@ import br.com.flexait.gateway.service.GatewayService;
 @SuppressWarnings("unused")
 public class IntegracaoTest {
 
-	private static final int BIN_CARTAO = 464646;
+	private static final int BIN_CARTAO = 455187;
+	private static final String IDENTIFICACAO_ESAB = "4291989";
 	private static final String IDENTIFICACAO = "1006993069";
 	
 	private static final String CHAVE_AUTENTICACAO = "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3";
@@ -67,6 +69,11 @@ public class IntegracaoTest {
 		params.setAutorizar(EAutorizar.AutorizarSemPassarPorAutenticacao);
 		params.setCapturar(true);
 		params.setCampoLivre("Transação de teste de integração ESAB");
+		params.setNomePortadorCartao("NOME PORTADOR");
+		params.setNumeroCartao(NUMERO_CARTAO_VISA);
+		params.setValidadeCartao("205012");
+		params.setIdentificadorCartao(EIdentificadorCartao.Informado);
+		params.setCodigoSegurancaCartao(555);
 		
 		return params;
 	}

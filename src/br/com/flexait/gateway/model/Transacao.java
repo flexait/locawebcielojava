@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @XStreamAlias("transacao")
-public class RetornoTransacao {
+public class Transacao {
 	
 	private String tid; //id da transação
 	
@@ -32,8 +32,8 @@ public class RetornoTransacao {
 	
 	private Cancelamento cancelamento;	
 	
-	public static RetornoTransacao of() {
-		return new RetornoTransacao();
+	public static Transacao of() {
+		return new Transacao();
 	}
 	
 }

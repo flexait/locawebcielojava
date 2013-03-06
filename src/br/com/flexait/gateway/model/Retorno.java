@@ -8,10 +8,10 @@ import lombok.Data;
 public class Retorno {
 	
 	@XStreamAlias("transacao")
-	private RetornoTransacao transacao;
+	private Transacao transacao;
 	private Erro erro;
 	
-	public static Retorno of(RetornoTransacao transacao, Erro erro) {
+	public static Retorno of(Transacao transacao, Erro erro) {
 		Retorno retorno = new Retorno();
 		retorno.setTransacao(transacao);
 		retorno.setErro(erro);

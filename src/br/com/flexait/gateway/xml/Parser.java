@@ -5,7 +5,7 @@ import java.io.InputStream;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
-import br.com.flexait.gateway.model.RetornoTransacao;
+import br.com.flexait.gateway.model.Transacao;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -30,7 +30,7 @@ public class Parser {
 	protected Object toObject() {
 		
 		xstream.autodetectAnnotations(true);
-		xstream.processAnnotations(RetornoTransacao.class);
+		xstream.processAnnotations(Transacao.class);
 		xstream.processAnnotations(Erro.class);
 		
 		return xstream.fromXML(is);
@@ -39,12 +39,12 @@ public class Parser {
 	public Retorno getRetorno() throws GatewayException {
 		Object object = toObject();
 		
-		RetornoTransacao transacao = null;
+		Transacao transacao = null;
 		Erro erro = null;
 		
 		Class<? extends Object> type = object.getClass();
-		if(type.isAssignableFrom(RetornoTransacao.class)) {
-			transacao = (RetornoTransacao) object;
+		if(type.isAssignableFrom(Transacao.class)) {
+			transacao = (Transacao) object;
 		}
 		else if(type.isAssignableFrom(Erro.class)) {
 			erro = (Erro) object;

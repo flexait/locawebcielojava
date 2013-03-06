@@ -11,7 +11,7 @@ import org.junit.Test;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
-import br.com.flexait.gateway.model.RetornoTransacao;
+import br.com.flexait.gateway.model.Transacao;
 
 public class ParserTest {
 
@@ -22,7 +22,7 @@ public class ParserTest {
 		String xml = getXmlTransacao();
 		InputStream inputStream = IOUtils.toInputStream(xml);
 		Object object = Parser.of(inputStream).toObject();
-		RetornoTransacao retorno = (RetornoTransacao) object;
+		Transacao retorno = (Transacao) object;
 		assertNotNull("Objeto deve ser retornardo", retorno);
 	}
 	

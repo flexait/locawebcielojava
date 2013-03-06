@@ -13,7 +13,7 @@ public enum EIdentificadorCartao {
 		this.valor = valor;
 	}
 	
-	public int getValor() {
-		return valor;
+	public String getValor() {
+		return String.valueOf(valor);
 	}
 }

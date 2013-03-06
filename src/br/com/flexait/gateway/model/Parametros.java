@@ -98,7 +98,7 @@ public class Parametros {
 		}
 		
 		if(formaPagamento != null) {
-			params.add(new BasicNameValuePair("forma_Pagamento", formaPagamento.toString()));
+			params.add(new BasicNameValuePair("forma_Pagamento", formaPagamento.getValor()));
 		}
 		
 		if(parcelas > 0) {
@@ -106,7 +106,7 @@ public class Parametros {
 		}
 		
 		if(autorizar != null) {
-			params.add(new BasicNameValuePair("autorizar", autorizar.toString()));
+			params.add(new BasicNameValuePair("autorizar", autorizar.getValor()));
 		}
 		
 		params.add(new BasicNameValuePair("capturar", String.valueOf(capturar)));
@@ -128,7 +128,7 @@ public class Parametros {
 		}
 		
 		if(identificadorCartao != null) {
-			params.add(new BasicNameValuePair("identificador_cartao", identificadorCartao.toString()));
+			params.add(new BasicNameValuePair("identificador_cartao", identificadorCartao.getValor()));
 		}
 		
 		if(codigoSegurancaCartao > 0) {
