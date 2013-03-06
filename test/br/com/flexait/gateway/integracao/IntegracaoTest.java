@@ -29,7 +29,6 @@ import br.com.flexait.gateway.service.GatewayServiceTest;
 @SuppressWarnings("unused")
 public class IntegracaoTest {
 
-	private static final String IDENTIFICACAO_ESAB = "4291989";
 	public static final String IDENTIFICACAO = "1006993069";
 	
 	private static final String NUMERO_CARTAO_MASTERCARD = "5453010000066167";
@@ -108,7 +107,7 @@ public class IntegracaoTest {
 	private static GatewayService getService() {
 		GatewayService service = GatewayService.of(
 			GatewayService.DEFAULT_URL_GATEWAY,
-			IntegracaoTest.IDENTIFICACAO_ESAB,
+			IntegracaoTest.IDENTIFICACAO,
 			ParametrosTest.CIELO,
 			ParametrosTest.TESTE
 		);
