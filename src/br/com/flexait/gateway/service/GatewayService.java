@@ -1,5 +1,6 @@
 package br.com.flexait.gateway.service;
 
+import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -16,6 +17,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -126,7 +128,10 @@ public class GatewayService {
 			
 			HttpResponse response = httpClient.execute(httpPost);
 			
-			return Parser.of(response.getEntity().getContent()).getRetorno();
+			InputStream content = response.getEntity().getContent();
+			System.out.println(IOUtils.toString(content));
+			
+			return Parser.of(content).getRetorno();
 			
 		} catch (Exception e) {
 			throw new GatewayException("Ocorreu um problema ao executar o post", e);
@@ -162,7 +167,7 @@ public class GatewayService {
 		return sch;
 	}
 
-	protected HttpClient configScheme(HttpClient httpClient) throws Exception {
+	public HttpClient configScheme(HttpClient httpClient) throws Exception {
 		Scheme sch = getShema();
 		httpClient.getConnectionManager().getSchemeRegistry().register(sch);
 		return httpClient;

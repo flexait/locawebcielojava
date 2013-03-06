@@ -1,8 +1,6 @@
 package br.com.flexait.gateway.error;
 
-import br.com.flexait.gateway.interfaces.IErro;
-
-public class Erro099 implements IErro {
+public class Erro099 extends AErro {
 
 	public String getCodigo() {
 		return "099";

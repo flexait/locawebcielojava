@@ -18,7 +18,7 @@ public class ParserTest {
 	Parser parser;
 	InputStream inputStream;
 	
-	@Test public void deveRetornarRetornoTransacaoDoXml() {
+	@Test public void deveRetornarRetornoTransacaoDoXml() throws Exception {
 		String xml = getXmlTransacao();
 		InputStream inputStream = IOUtils.toInputStream(xml);
 		Object object = Parser.of(inputStream).toObject();
@@ -26,7 +26,7 @@ public class ParserTest {
 		assertNotNull("Objeto deve ser retornardo", retorno);
 	}
 	
-	@Test public void deveRetornarErroDoXml() {
+	@Test public void deveRetornarErroDoXml() throws Exception {
 		String xml = getXmlErro();
 		InputStream inputStream = IOUtils.toInputStream(xml);
 		Object object = Parser.of(inputStream).toObject();
@@ -34,7 +34,7 @@ public class ParserTest {
 		assertNotNull("Objeto deve ser retornardo", erro);	
 	}
 	
-	@Test public void deveRetornarObjetoRetorno() throws GatewayException {
+	@Test public void deveRetornarObjetoRetorno() throws GatewayException, Exception {
 		String xml = getXmlTransacao();
 		Retorno retorno = Parser.of(IOUtils.toInputStream(xml)).getRetorno();
 		assertNotNull("Objeto deve ser retornardo", retorno.getTransacao());

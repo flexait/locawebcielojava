@@ -112,7 +112,7 @@ public class GatewayServiceTest {
 		return response;
 	}
 
-	private GatewayService getService() {
+	public static GatewayService getService() {
 		GatewayService service = GatewayService.of(
 			GatewayService.DEFAULT_URL_GATEWAY,
 			IDENTIFICACAO,

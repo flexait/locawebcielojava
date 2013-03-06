@@ -98,7 +98,7 @@ public class Parametros {
 		}
 		
 		if(formaPagamento != null) {
-			params.add(new BasicNameValuePair("forma_Pagamento", formaPagamento.getValor()));
+			params.add(new BasicNameValuePair("forma_pagamento", formaPagamento.getValor()));
 		}
 		
 		if(parcelas > 0) {
@@ -132,7 +132,7 @@ public class Parametros {
 		}
 		
 		if(codigoSegurancaCartao > 0) {
-			params.add(new BasicNameValuePair("codigoSegurancaCartao", String.valueOf(codigoSegurancaCartao)));
+			params.add(new BasicNameValuePair("codigo_seguranca_cartao", String.valueOf(codigoSegurancaCartao)));
 		}
 		
 		if(tid != null) {

@@ -1,8 +1,7 @@
 package br.com.flexait.gateway.error;
 
-import br.com.flexait.gateway.interfaces.IErro;
 
-public class Erro001 implements IErro {
+public class Erro001 extends AErro {
 
 	public String getCodigo() {
 		return "001";

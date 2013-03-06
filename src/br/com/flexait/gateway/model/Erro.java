@@ -2,14 +2,15 @@ package br.com.flexait.gateway.model;
 
 import lombok.Data;
 import br.com.flexait.gateway.enums.ETipoErro;
+import br.com.flexait.gateway.error.AErro;
 import br.com.flexait.gateway.error.Erro001;
 import br.com.flexait.gateway.error.Erro002;
 import br.com.flexait.gateway.error.Erro003;
+import br.com.flexait.gateway.error.Erro010;
 import br.com.flexait.gateway.error.Erro011;
 import br.com.flexait.gateway.error.Erro012;
 import br.com.flexait.gateway.error.Erro020;
 import br.com.flexait.gateway.error.Erro021;
-import br.com.flexait.gateway.error.Erro010;
 import br.com.flexait.gateway.error.Erro022;
 import br.com.flexait.gateway.error.Erro030;
 import br.com.flexait.gateway.error.Erro031;
@@ -20,7 +21,6 @@ import br.com.flexait.gateway.error.Erro041;
 import br.com.flexait.gateway.error.Erro042;
 import br.com.flexait.gateway.error.Erro099;
 import br.com.flexait.gateway.error.Erro999;
-import br.com.flexait.gateway.interfaces.IErro;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -35,11 +35,18 @@ public class Erro {
 	@XStreamAlias("codigo_operadora")
 	private String codigoOperadora;
 
-	private IErro erro;
+	private AErro erro;
 	
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 		setErro(codigo);
+	}
+	
+	public AErro getErro() {
+		if(erro == null) {
+			setErro(codigo);
+		}
+		return erro;
 	}
 
 	public void setErro(String codigo) {

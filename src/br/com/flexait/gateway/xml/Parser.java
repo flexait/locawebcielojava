@@ -1,5 +1,6 @@
 package br.com.flexait.gateway.xml;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import br.com.flexait.gateway.exception.GatewayException;
@@ -23,7 +24,7 @@ public class Parser {
 		xstream = new XStream();
 	}
 	
-	public static Parser of(InputStream is) {
+	public static Parser of(InputStream is) throws IOException {
 		return new Parser(is);
 	}
 	
