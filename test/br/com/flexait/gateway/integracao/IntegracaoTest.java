@@ -5,7 +5,6 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,18 +13,14 @@ import org.mockito.Mockito;
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
-import br.com.flexait.gateway.enums.EEnconde;
 import br.com.flexait.gateway.enums.EFormaPagamento;
 import br.com.flexait.gateway.enums.EIdentificadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
-import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
-import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.service.GatewayService;
-import br.com.flexait.gateway.service.GatewayServiceTest;
 import br.com.flexait.gateway.util.PropertiesUtil;
 
 @SuppressWarnings("unused")
