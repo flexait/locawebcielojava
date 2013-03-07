@@ -1,8 +1,10 @@
-package br.com.flexait.gateway.xml;
+package br.com.flexait.gateway.util;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import br.com.flexait.gateway.util.NumberUtil;
 
 public class NumberUtilTest {
 

@@ -33,6 +33,7 @@ import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.Retorno;
+import br.com.flexait.gateway.util.PropertiesUtil;
 import br.com.flexait.gateway.xml.Parser;
 
 @Data
@@ -111,6 +112,13 @@ public class GatewayService {
 		return new GatewayService(url, identificacao, modulo, ambiente);
 	}
 	
+	public static GatewayService of() throws Exception {
+		PropertiesUtil util = PropertiesUtil.of();
+		EAmbiente amb = util.getAmbiente();
+		String identificador = util.getIdentificador();
+		return new GatewayService(DEFAULT_URL_GATEWAY, identificador, EModulo.CIELO, amb);
+	}
+	
 	protected void setParametros(Parametros parametros) throws GatewayException {
 		try {
 			this.parametros = parametros;
@@ -185,5 +193,5 @@ public class GatewayService {
 		httpClient.getConnectionManager().getSchemeRegistry().register(sch);
 		return httpClient;
 	}
-	
+
 }

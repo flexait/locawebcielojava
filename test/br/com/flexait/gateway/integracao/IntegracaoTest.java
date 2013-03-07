@@ -25,6 +25,7 @@ import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.service.GatewayService;
 import br.com.flexait.gateway.service.GatewayServiceTest;
+import br.com.flexait.gateway.util.PropertiesUtil;
 
 @SuppressWarnings("unused")
 public class IntegracaoTest {
@@ -89,14 +90,6 @@ public class IntegracaoTest {
 	}
 	
 	@Test
-	public void deveCancelarTransacao() throws Exception {
-		params.setOperacao(EOperacao.Cancelamento);
-		Retorno retorno = service.post(params);
-		
-		assertNotNull("Deve retornar transação com erro devido aos dados do servidor", retorno.getErro());
-	}
-	
-	@Test
 	public void deveConsultaTransacao() throws Exception {
 		params.setOperacao(EOperacao.Consulta);
 		Retorno retorno = service.post(params);
@@ -104,15 +97,37 @@ public class IntegracaoTest {
 		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 	}
 	
-	private static GatewayService getService() {
+	@Test
+	public void deveCapturarTransacao() throws Exception {
+		params.setOperacao(EOperacao.Captura);
+		Retorno retorno = service.post(params);
+		
+		assertNotNull("Deve retornar transação com erro pois a transação de teste está cancelada", retorno.getErro());
+	}
+	
+	@Test
+	public void deveCancelarTransacao() throws Exception {
+		params.setOperacao(EOperacao.Cancelamento);
+		Retorno retorno = service.post(params);
+		
+		assertNotNull("Deve retornar transação com erro devido aos dados do servidor", retorno.getErro());
+	}
+	
+	private static GatewayService getService() throws Exception {
 		GatewayService service = GatewayService.of(
 			GatewayService.DEFAULT_URL_GATEWAY,
-			IntegracaoTest.IDENTIFICACAO,
+			getIdentificador(),
 			ParametrosTest.CIELO,
 			ParametrosTest.TESTE
 		);
 		
 		return service;
+	}
+	
+	private static String getIdentificador() throws Exception {
+		PropertiesUtil util = PropertiesUtil.of();
+		util.setAmbiente(EAmbiente.TESTE);
+		return util.getIdentificador();
 	}
 
 }

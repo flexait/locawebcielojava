@@ -2,6 +2,8 @@ package br.com.flexait.gateway.xml;
 
 import java.util.Calendar;
 
+import br.com.flexait.gateway.util.DateUtil;
+
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

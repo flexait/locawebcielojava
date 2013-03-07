@@ -1,4 +1,4 @@
-package br.com.flexait.gateway.xml;
+package br.com.flexait.gateway.util;
 
 import java.text.DateFormat;
 import java.text.ParseException;

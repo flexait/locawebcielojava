@@ -17,7 +17,7 @@ import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
-import br.com.flexait.gateway.xml.NumberUtil;
+import br.com.flexait.gateway.util.NumberUtil;
 
 @Data
 public class Parametros {

@@ -30,6 +30,7 @@ import br.com.flexait.gateway.integracao.IntegracaoTest;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
+import br.com.flexait.gateway.util.PropertiesUtil;
 import br.com.flexait.gateway.xml.ParserTest;
 
 public class GatewayServiceTest {
@@ -96,6 +97,20 @@ public class GatewayServiceTest {
 		assertNotNull("Deve retornar objeto deserializado", retorno.getTransacao());
 		
 		verify(gatewayService).setParametros(Mockito.any(Parametros.class));
+	}
+	
+	@Test public void deveConstruirService() throws Exception {
+		GatewayService service = GatewayService.of();
+		assertEquals(service.getAmbiente(), EAmbiente.TESTE);
+		assertEquals(service.getIdentificacao(), "1006993069");
+		assertEquals(service.getUrl(), GatewayService.DEFAULT_URL_GATEWAY);
+	}
+	
+	@Test public void devePegarIdentificadorDoProperties() throws Exception {
+		
+		String identificador = PropertiesUtil.of().getIdentificador();
+		assertEquals("Deve retornar 1006993069", "1006993069", identificador);
+		
 	}
 	
 	private HttpResponse prepareResponse(int expectedResponseStatus,

@@ -12,6 +12,7 @@ import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.model.Transacao;
+import br.com.flexait.gateway.xml.Parser;
 
 public class ParserTest {
 
