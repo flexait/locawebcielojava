@@ -3,6 +3,7 @@ package br.com.flexait.gateway.xml;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -36,18 +37,30 @@ public class ParserTest {
 	}
 	
 	@Test public void deveRetornarObjetoRetorno() throws GatewayException, Exception {
-		String xml = getXmlTransacao();
-		Retorno retorno = Parser.of(IOUtils.toInputStream(xml)).getRetorno();
+		Retorno retorno = getRetornoTransacao();
 		assertNotNull("Objeto deve ser retornardo", retorno.getTransacao());
 		assertNull("Objeto deve ser null", retorno.getErro());
 		
-		xml = getXmlErro();
-		retorno = Parser.of(IOUtils.toInputStream(xml)).getRetorno();
+		retorno = getRetornoErro();
 		assertNull("Objeto deve ser null", retorno.getTransacao());
 		assertNotNull("Objeto deve ser retornardo", retorno.getErro());
 	}
 
-	private String getXmlErro() {
+	public static Retorno getRetornoErro() throws Exception, IOException {
+		String xml;
+		Retorno retorno;
+		xml = getXmlErro();
+		retorno = Parser.of(IOUtils.toInputStream(xml)).getRetorno();
+		return retorno;
+	}
+
+	public static Retorno getRetornoTransacao() throws Exception, IOException {
+		String xml = getXmlTransacao();
+		Retorno retorno = Parser.of(IOUtils.toInputStream(xml)).getRetorno();
+		return retorno;
+	}
+
+	public static String getXmlErro() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");

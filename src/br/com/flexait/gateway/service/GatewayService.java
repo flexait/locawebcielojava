@@ -31,13 +31,14 @@ import org.apache.log4j.Logger;
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.exception.GatewayException;
+import br.com.flexait.gateway.interfaces.IGatewayService;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.util.PropertiesUtil;
 import br.com.flexait.gateway.xml.Parser;
 
 @Data
-public class GatewayService {
+public class GatewayService implements IGatewayService {
 
 	public static final String DEFAULT_URL_GATEWAY = "https://comercio.locaweb.com.br/comercio.comp";
 	
