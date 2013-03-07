@@ -41,7 +41,7 @@ public class GatewayService {
 
 	public static final String DEFAULT_URL_GATEWAY = "https://comercio.locaweb.com.br/comercio.comp";
 	
-	public static Logger log = Logger.getLogger(GatewayService.class.getSimpleName());
+	public static Logger log = Logger.getLogger(GatewayService.class);
 	
 	private String url;
 	private final String identificacao;
@@ -58,9 +58,24 @@ public class GatewayService {
 	 * Construtor para uso em produção, usando url padrão e ambiente de produção
 	 * @param identificacao
 	 * @param modulo
+	 * @throws Exception 
 	 */
-	GatewayService(String identificacao, EModulo modulo) {
-		this(DEFAULT_URL_GATEWAY, identificacao, modulo, EAmbiente.PRODUCAO);
+	GatewayService() throws Exception {
+		super();
+		PropertiesUtil util = PropertiesUtil.of();
+		EAmbiente amb = util.getAmbiente();
+		String identificador = util.getIdentificador();
+		EModulo mod = util.getModulo();
+		String url = util.getUrl();
+		
+		this.httpClient = new DefaultHttpClient();
+		this.setUrl(url);
+		this.identificacao = identificador;
+		
+		this.ambiente = amb;
+		this.modulo = mod;
+		
+		logConstruct(url, identificacao, ambiente);
 	}
 	
 	/**
@@ -80,6 +95,10 @@ public class GatewayService {
 		this.modulo = modulo;
 		this.ambiente = ambiente;
 		
+		logConstruct(url, identificacao, ambiente);
+	}
+
+	private void logConstruct(String url, String identificacao, EAmbiente ambiente) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Service instanciado:");
 		sb.append("\n\tURL = " + url);
@@ -87,16 +106,6 @@ public class GatewayService {
 		sb.append("\n\tAmbiente = " + ambiente);
 		log.debug("\n=====================================================================================================\n");
 		log.debug(sb.toString());
-	}
-	
-	/**
-	 * Função de construção do service padrão para produção
-	 * @param identificacao
-	 * @param modulo
-	 * @return
-	 */
-	public static GatewayService of(String identificacao, EModulo modulo) {
-		return new GatewayService(identificacao, modulo);
 	}
 	
 	/**
@@ -112,11 +121,13 @@ public class GatewayService {
 		return new GatewayService(url, identificacao, modulo, ambiente);
 	}
 	
+	/**
+	 * Construtor vazio, baseado nos valores do properties
+	 * @return
+	 * @throws Exception
+	 */
 	public static GatewayService of() throws Exception {
-		PropertiesUtil util = PropertiesUtil.of();
-		EAmbiente amb = util.getAmbiente();
-		String identificador = util.getIdentificador();
-		return new GatewayService(DEFAULT_URL_GATEWAY, identificador, EModulo.CIELO, amb);
+		return new GatewayService();
 	}
 	
 	protected void setParametros(Parametros parametros) throws GatewayException {
@@ -127,8 +138,9 @@ public class GatewayService {
 			this.parametros.setAmbiente(ambiente);
 			
 			List<NameValuePair> httpParameters = this.parametros.getHttpParameters();
-			UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(httpParameters);
-			httpPost.setEntity(urlEncodedFormEntity);
+			
+			UrlEncodedFormEntity urlEncoded = new UrlEncodedFormEntity(httpParameters);
+			httpPost.setEntity(urlEncoded);
 			
 		} catch (Exception e) {
 			throw new GatewayException("Não foi possível encodar os parametros", e);

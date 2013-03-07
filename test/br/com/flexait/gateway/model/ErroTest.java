@@ -42,55 +42,55 @@ public class ErroTest {
 	public void deveRetornarErroCorreto() {
 		
 		erro.setCodigo("001");
-		assertEquals("Erro deve ser 001", Erro001.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 001", Erro001.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("002");
-		assertEquals("Erro deve ser 002", Erro002.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 002", Erro002.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("003");
-		assertEquals("Erro deve ser 003", Erro003.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 003", Erro003.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("010");
-		assertEquals("Erro deve ser 010", Erro010.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 010", Erro010.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("011");
-		assertEquals("Erro deve ser 011", Erro011.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 011", Erro011.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("012");
-		assertEquals("Erro deve ser 012", Erro012.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 012", Erro012.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("020");
-		assertEquals("Erro deve ser 020", Erro020.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 020", Erro020.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("021");
-		assertEquals("Erro deve ser 021", Erro021.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 021", Erro021.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("022");
-		assertEquals("Erro deve ser 022", Erro022.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 022", Erro022.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("030");
-		assertEquals("Erro deve ser 030", Erro030.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 030", Erro030.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("031");
-		assertEquals("Erro deve ser 031", Erro031.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 031", Erro031.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("032");
-		assertEquals("Erro deve ser 032", Erro032.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 032", Erro032.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("033");
-		assertEquals("Erro deve ser 033", Erro033.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 033", Erro033.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("040");
-		assertEquals("Erro deve ser 040", Erro040.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 040", Erro040.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("041");
-		assertEquals("Erro deve ser 041", Erro041.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 041", Erro041.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("042");
-		assertEquals("Erro deve ser 042", Erro042.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 042", Erro042.class, erro.getDetalhes().getClass());
 		
 		erro.setCodigo("099");
-		assertEquals("Erro deve ser 099", Erro099.class, erro.getErro().getClass());
+		assertEquals("Erro deve ser 099", Erro099.class, erro.getDetalhes().getClass());
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

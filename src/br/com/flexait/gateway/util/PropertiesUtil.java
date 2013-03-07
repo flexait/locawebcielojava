@@ -7,6 +7,7 @@ import java.util.Properties;
 import lombok.Setter;
 
 import br.com.flexait.gateway.enums.EAmbiente;
+import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.exception.GatewayException;
 
 public class PropertiesUtil extends Properties {
@@ -14,6 +15,8 @@ public class PropertiesUtil extends Properties {
 	private static final long serialVersionUID = 4014546612069537902L;
 	
 	protected static final String GATEWAY_AMBIENTE = "gateway.ambiente";
+	protected static final String GATEWAY_MODULO = "gateway.modulo";
+	protected static final String GATEWAY_URL = "gateway.url";
 	protected static final String GATEWAY_IDENTIFICADOR = "gateway.%s.identificador";
 
 	protected static final String GATEWAY_FILE = "/gateway.properties";
@@ -61,6 +64,15 @@ public class PropertiesUtil extends Properties {
 	public EAmbiente getAmbiente() {
 		String ambiente = get(GATEWAY_AMBIENTE);
 		return EAmbiente.valueOf(ambiente);
+	}
+
+	public String getUrl() {
+		return get(GATEWAY_URL);
+	}
+
+	public EModulo getModulo() {
+		String modulo = get(GATEWAY_MODULO);
+		return EModulo.valueOf(modulo);
 	}
 
 }

@@ -35,95 +35,95 @@ public class Erro {
 	@XStreamAlias("codigo_operadora")
 	private String codigoOperadora;
 
-	private AErro erro;
+	private AErro detalhes;
 	
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
-		setErro(codigo);
+		setDetalhes(codigo);
 	}
 	
-	public AErro getErro() {
-		if(erro == null) {
-			setErro(codigo);
+	public AErro getDetalhes() {
+		if(detalhes == null) {
+			setDetalhes(codigo);
 		}
-		return erro;
+		return detalhes;
 	}
 
-	public void setErro(String codigo) {
+	public void setDetalhes(String codigo) {
 		ETipoErro tipoErro = ETipoErro.get(codigo);
 
 		switch (tipoErro) {
 
 		case E001:
-			erro = new Erro001();
+			detalhes = new Erro001();
 			break;
 
 		case E002:
-			erro = new Erro002();
+			detalhes = new Erro002();
 			break;
 
 		case E003:
-			erro = new Erro003();
+			detalhes = new Erro003();
 			break;
 
 		case E010:
-			erro = new Erro010();
+			detalhes = new Erro010();
 			break;
 
 		case E011:
-			erro = new Erro011();
+			detalhes = new Erro011();
 			break;
 
 		case E012:
-			erro = new Erro012();
+			detalhes = new Erro012();
 			break;
 		
 		case E020:
-			erro = new Erro020();
+			detalhes = new Erro020();
 			break;
 
 		case E021:
-			erro = new Erro021();
+			detalhes = new Erro021();
 			break;
 
 		case E022:
-			erro = new Erro022();
+			detalhes = new Erro022();
 			break;
 
 		case E030:
-			erro = new Erro030();
+			detalhes = new Erro030();
 			break;
 
 		case E031:
-			erro = new Erro031();
+			detalhes = new Erro031();
 			break;
 
 		case E032:
-			erro = new Erro032();
+			detalhes = new Erro032();
 			break;
 
 		case E033:
-			erro = new Erro033();
+			detalhes = new Erro033();
 			break;
 
 		case E040:
-			erro = new Erro040();
+			detalhes = new Erro040();
 			break;
 
 		case E041:
-			erro = new Erro041();
+			detalhes = new Erro041();
 			break;
 
 		case E042:
-			erro = new Erro042();
+			detalhes = new Erro042();
 			break;
 
 		case E099:
-			erro = new Erro099();
+			detalhes = new Erro099();
 			break;
 			
 		case E999:
-			erro = new Erro999();
+			detalhes = new Erro999();
 			break;
 			
 		case NENHUM:

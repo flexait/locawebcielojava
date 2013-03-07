@@ -53,6 +53,13 @@ public class Parametros {
 	public static Parametros of() {
 		return new Parametros();
 	}
+	
+	public static Parametros of(EOperacao operacao, String tid) {
+		Parametros parametros = new Parametros();
+		parametros.setOperacao(operacao);
+		parametros.setTid(tid);
+		return parametros;
+	}
 
 	public List<NameValuePair> getHttpParameters() throws GatewayException {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();

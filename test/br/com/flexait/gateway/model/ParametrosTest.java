@@ -55,14 +55,17 @@ public class ParametrosTest {
 	}
 	
 	@Test public void deveEncodarUrl() throws GatewayException {
+		params.setIdentificacao("123");
 		params.setCampoLivre(null);
 		params.setIdioma(null);
 		params.setDescricao(null);
+		params.setTid(null);
 		List<NameValuePair> parameters = params.getHttpParameters();
 		assertFalse("Uri não pode ser vazia", parameters.isEmpty());
 		
 		for (NameValuePair n: parameters) {
 			assertNotNull("Não pode existir parametro nulo", n.getValue());
+			assertFalse("Não pode existir parametro nulo", n.getValue().isEmpty());
 		}
 	}
 

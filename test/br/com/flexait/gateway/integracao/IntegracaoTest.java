@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
+import br.com.flexait.gateway.enums.EEnconde;
 import br.com.flexait.gateway.enums.EFormaPagamento;
 import br.com.flexait.gateway.enums.EIdentificadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
@@ -51,7 +52,7 @@ public class IntegracaoTest {
 		service = null;
 	}
 
-	private Parametros getParametrosRegistro() {
+	public static Parametros getParametrosRegistro() {
 		String numeroCartao = NUMERO_CARTAO_MASTERCARD;
 		String bin = numeroCartao.substring(0, 6);
 		
@@ -71,9 +72,9 @@ public class IntegracaoTest {
 		
 		params.setNomePortadorCartao("INTEGRACAO TESTE");
 		params.setNumeroCartao(numeroCartao);
-		params.setValidadeCartao("201712");
+		params.setValidadeCartao("202012");
 		params.setIndicadorCartao(EIdentificadorCartao.Informado);
-		params.setCodigoSegurancaCartao("034");
+		params.setCodigoSegurancaCartao("555");
 		params.setTid("10069930690CDF4F1001");
 		
 		return params;
@@ -126,7 +127,9 @@ public class IntegracaoTest {
 	
 	private static String getIdentificador() throws Exception {
 		PropertiesUtil util = PropertiesUtil.of();
-		util.setAmbiente(EAmbiente.TESTE);
+		
+		//usado devido ao serviço de teste da locaweb não funcionar
+		util.setAmbiente(EAmbiente.PRODUCAO);
 		return util.getIdentificador();
 	}
 

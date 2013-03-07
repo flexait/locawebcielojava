@@ -102,8 +102,9 @@ public class GatewayServiceTest {
 	@Test public void deveConstruirService() throws Exception {
 		GatewayService service = GatewayService.of();
 		assertEquals(service.getAmbiente(), EAmbiente.TESTE);
+		assertEquals(service.getModulo(), EModulo.CIELO);
 		assertEquals(service.getIdentificacao(), "1006993069");
-		assertEquals(service.getUrl(), GatewayService.DEFAULT_URL_GATEWAY);
+		assertEquals(service.getUrl(), "https://comercio.locaweb.com.br/comercio.comp");
 	}
 	
 	@Test public void devePegarIdentificadorDoProperties() throws Exception {
