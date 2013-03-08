@@ -57,8 +57,8 @@ public class GatewayService implements IGatewayService {
 	
 	/**
 	 * Construtor para uso em produção, usando url padrão e ambiente de produção
-	 * @param identificacao
-	 * @param modulo
+	 * @param paramsDefault.identificacao
+	 * @param paramsDefault.modulo
 	 * @throws Exception 
 	 */
 	GatewayService() throws Exception {

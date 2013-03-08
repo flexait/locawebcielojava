@@ -1,54 +1,113 @@
 package br.com.flexait.gateway.model;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
 import br.com.flexait.gateway.enums.EFormaPagamento;
-import br.com.flexait.gateway.enums.EIdentificadorCartao;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
-import br.com.flexait.gateway.util.NumberUtil;
+import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
+import br.com.flexait.gateway.interfaces.DefaultGroup;
+import br.com.flexait.gateway.interfaces.TIdGroup;
+
+import com.google.common.base.Strings;
 
 @Data
 public class Parametros {
 	
+	protected static final String PATTERN_CODIGO_SEGURANCA = "^[0-9]{3}$";
+	
 	/** codigo cliente */
+	@NotEmpty(groups = DefaultGroup.class)
 	private String identificacao; //codigo cliente do gateway
+	
+	@NotNull(groups = DefaultGroup.class)
 	private EModulo modulo;
+	
+	@NotNull(groups = DefaultGroup.class)
 	private EAmbiente ambiente;
+	
+	@NotNull(groups = DefaultGroup.class)
 	private EOperacao operacao;
+	
+	@Size(max = 6, min = 6)
 	private String binCartao;
+	
 	private EIdioma idioma;
 	
-	//dados do pedido
-	private double valor;
-	private long pedido; //numero do pedido
+	@Min(value = 1, groups = AutorizacaoGroup.class) 
+	@NotNull(groups = AutorizacaoGroup.class)
+	private Double valor; //dados do pedido
+	
+	@Min(value = 1L, groups = AutorizacaoGroup.class)
+	@NotNull(groups = AutorizacaoGroup.class)
+	private Long pedido; //numero do pedido
+	
 	private String descricao;
+	
+	@NotNull(groups = AutorizacaoGroup.class)
 	private EBandeira bandeira;
+	
+	@NotNull(groups = AutorizacaoGroup.class) 
 	private EFormaPagamento formaPagamento;
-	private int parcelas;
+	
+	@Min(value = 1, groups = AutorizacaoGroup.class)
+	@NotNull(groups = AutorizacaoGroup.class)
+	private Integer parcelas;
+	
 	private EAutorizar autorizar;
+	
 	private boolean capturar;
+	
 	private String campoLivre;
 	
+	@NotEmpty(groups = AutorizacaoGroup.class)
 	private String nomePortadorCartao;
+	
+	@Size(max = 16, min = 16, groups = AutorizacaoGroup.class) 
+	@NotEmpty(groups = AutorizacaoGroup.class) 
 	private String numeroCartao;
+	
+	@Size(max = 6, min = 6, groups = AutorizacaoGroup.class) 
+	@NotEmpty(groups = AutorizacaoGroup.class)
 	private String validadeCartao;
-	private EIdentificadorCartao indicadorCartao;
+	
+	@NotNull(groups = AutorizacaoGroup.class)
+	private EIndicadorCartao indicadorCartao;
+	
+	@Size(max = 3, min = 3, groups = AutorizacaoGroup.class)
+	@Pattern(regexp = PATTERN_CODIGO_SEGURANCA) 
+	@NotEmpty(groups = AutorizacaoGroup.class)
 	private String codigoSegurancaCartao;
 	
+	@NotEmpty(groups = TIdGroup.class)
 	private String tid;
 	
+	@AssertTrue(message = "O código é obrigatório se o indicador for informado", groups = AutorizacaoGroup.class)
+	public boolean isCodigoValid() {
+		return (indicadorCartao != EIndicadorCartao.Informado && bandeira == EBandeira.visa) ||
+				!Strings.isNullOrEmpty(codigoSegurancaCartao);
+	}
+	
+	public boolean isCartaoValid() {
+		return false;
+	}
 	
 	public static Parametros of() {
 		return new Parametros();
@@ -62,91 +121,28 @@ public class Parametros {
 	}
 
 	public List<NameValuePair> getHttpParameters() throws GatewayException {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		
-		if(identificacao != null) {
-			params.add(new BasicNameValuePair("identificacao", identificacao));
+		return ParametrosArray.of(this).getParameters();
+	}
+
+	public String getFormaPagamentoString() {
+		if(formaPagamento == null) {
+			return null;
 		}
-		
-		if(modulo != null) {
-			params.add(new BasicNameValuePair("modulo", modulo.toString()));
+		return formaPagamento.getValor();
+	}
+
+	public String getAutorizarString() {
+		if(autorizar == null) {
+			return null;
 		}
-		
-		if(operacao != null) {
-			params.add(new BasicNameValuePair("operacao", operacao.toString()));
+		return autorizar.getValor();
+	}
+
+	public String getIndicadorCartaoString() {
+		if(indicadorCartao == null) {
+			return null;
 		}
-		
-		if(ambiente != null) {
-			params.add(new BasicNameValuePair("ambiente", ambiente.toString()));
-		}
-		
-		if(binCartao != null) {
-			params.add(new BasicNameValuePair("bin_cartao", binCartao));
-		}
-		
-		if(idioma != null) {
-			params.add(new BasicNameValuePair("idioma", idioma.toString()));
-		}
-		
-		if(valor > 0.0) {
-			params.add(new BasicNameValuePair("valor", NumberUtil.format(valor)));
-		}
-		
-		if(pedido > 0L) {
-			params.add(new BasicNameValuePair("pedido", String.valueOf(pedido)));
-		}
-		
-		if(descricao != null) {
-			params.add(new BasicNameValuePair("descricao", descricao));
-		}
-		
-		if(bandeira != null) {
-			params.add(new BasicNameValuePair("bandeira", bandeira.toString()));
-		}
-		
-		if(formaPagamento != null) {
-			params.add(new BasicNameValuePair("forma_pagamento", formaPagamento.getValor()));
-		}
-		
-		if(parcelas > 0) {
-			params.add(new BasicNameValuePair("parcelas", String.valueOf(parcelas)));
-		}
-		
-		if(autorizar != null) {
-			params.add(new BasicNameValuePair("autorizar", autorizar.getValor()));
-		}
-		
-		params.add(new BasicNameValuePair("capturar", String.valueOf(capturar)));
-		
-		if(campoLivre != null) {
-			params.add(new BasicNameValuePair("campo_livre", campoLivre));
-		}
-		
-		if(nomePortadorCartao != null) {
-			params.add(new BasicNameValuePair("nome_portador_cartao", nomePortadorCartao));
-		}
-		
-		if(numeroCartao != null) {
-			params.add(new BasicNameValuePair("numero_cartao", numeroCartao));
-		}
-		
-		if(validadeCartao != null) {
-			params.add(new BasicNameValuePair("validade_cartao", validadeCartao));
-		}
-		
-		if(indicadorCartao != null) {
-			params.add(new BasicNameValuePair("indicador_cartao", indicadorCartao.getValor()));
-		}
-		
-		if(codigoSegurancaCartao != null) {
-			params.add(new BasicNameValuePair("codigo_seguranca_cartao", codigoSegurancaCartao));
-		}
-		
-		if(tid != null) {
-			params.add(new BasicNameValuePair("tid", tid));
-		}
-		
-		return params;
+		return indicadorCartao.getValor();
 	}
 	
 }

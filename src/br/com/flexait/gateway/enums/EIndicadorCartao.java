@@ -1,6 +1,6 @@
 package br.com.flexait.gateway.enums;
 
-public enum EIdentificadorCartao {
+public enum EIndicadorCartao {
 	
 	NaoInformado(0),
 	Informado(1),
@@ -9,7 +9,7 @@ public enum EIdentificadorCartao {
 	
 	private int valor;
 	
-	private EIdentificadorCartao(int valor) {
+	private EIndicadorCartao(int valor) {
 		this.valor = valor;
 	}
 	
