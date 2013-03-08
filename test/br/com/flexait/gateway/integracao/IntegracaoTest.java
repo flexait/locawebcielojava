@@ -14,8 +14,9 @@ import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
 import br.com.flexait.gateway.enums.EFormaPagamento;
-import br.com.flexait.gateway.enums.EIdentificadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
+import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
@@ -23,13 +24,12 @@ import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.service.GatewayService;
 import br.com.flexait.gateway.util.PropertiesUtil;
 
-@SuppressWarnings("unused")
 public class IntegracaoTest {
 
 	public static final String IDENTIFICACAO = "1006993069";
 	
-	private static final String NUMERO_CARTAO_MASTERCARD = "5453010000066167";
-	private static final String NUMERO_CARTAO_VISA = "4551870000000183";
+	public static final String NUMERO_CARTAO_MASTERCARD = "5453010000066167";
+	public static final String NUMERO_CARTAO_VISA = "4551870000000183";
 
 	GatewayService service;
 	Parametros params;
@@ -52,6 +52,9 @@ public class IntegracaoTest {
 		String bin = numeroCartao.substring(0, 6);
 		
 		Parametros params = Parametros.of();
+		params.setIdentificacao(IDENTIFICACAO);
+		params.setAmbiente(EAmbiente.TESTE);
+		params.setModulo(EModulo.CIELO);
 		params.setOperacao(EOperacao.AutorizacaoDireta);
 		params.setBinCartao(bin);
 		params.setIdioma(EIdioma.PT);
@@ -68,7 +71,7 @@ public class IntegracaoTest {
 		params.setNomePortadorCartao("INTEGRACAO TESTE");
 		params.setNumeroCartao(numeroCartao);
 		params.setValidadeCartao("202012");
-		params.setIndicadorCartao(EIdentificadorCartao.Informado);
+		params.setIndicadorCartao(EIndicadorCartao.Informado);
 		params.setCodigoSegurancaCartao("555");
 		params.setTid("10069930690CDF4F1001");
 		

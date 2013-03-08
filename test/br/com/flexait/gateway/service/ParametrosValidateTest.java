@@ -1,89 +1,91 @@
 package br.com.flexait.gateway.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.flexait.gateway.enums.EIdentificadorCartao;
+import br.com.flexait.gateway.enums.EAmbiente;
+import br.com.flexait.gateway.enums.EBandeira;
+import br.com.flexait.gateway.enums.EFormaPagamento;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
+import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
-import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.integracao.IntegracaoTest;
 import br.com.flexait.gateway.model.Parametros;
 
+
 public class ParametrosValidateTest {
 
+	ParametrosValidate validate;
+	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
+		validate = ParametrosValidate.of(IntegracaoTest.getParametrosRegistro());
 	}
-
+	
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
+		validate = null;
 	}
-
-	@Test(expected = GatewayException.class)
-	public void deveInvalidarParametrosRegistro() throws GatewayException {
+	
+	@Test
+	public void deveRetornarHibernateValidator() {
+		assertNotNull("deve retornar validator", validate.getValidator());
+	}
+	
+	@Test public void deveValidarBeanTidGroup() {
 		Parametros parametros = IntegracaoTest.getParametrosRegistro();
-		parametros.setBandeira(null);
-		ParametrosValidate.of(parametros).validate();
+		parametros.setTid(null);
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse("deve ser invalido", validate.validateTidGroup());
+		
+		parametros.setTid("123");
+		validate = ParametrosValidate.of(parametros);
+		assertTrue("deve ser invalido", validate.validateTidGroup());
 	}
 	
-	@Test(expected = GatewayException.class)
-	public void deveInvalidarParametrosConsulta() throws GatewayException {
-		Parametros parametros = Parametros.of(EOperacao.Consulta, "");
-		ParametrosValidate.of(parametros).validate();
+	@Test public void deveValidarDefaultGroup() {
+		Parametros parametros = IntegracaoTest.getParametrosRegistro();
+		parametros.setIdentificacao(null);
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse("deve ser invalido", validate.validateDefaultGroup());
 	}
 	
-	@Test(expected = GatewayException.class) 
-	public void deveInvalidarParametrosCaptura() throws GatewayException {		
-		Parametros parametros =  Parametros.of(EOperacao.Captura, "");
-		ParametrosValidate.of(parametros).validate();
+	@Test public void deveValidarAutorizacaoGroup() {
+		Parametros parametros = IntegracaoTest.getParametrosRegistro();
+		parametros.setNumeroCartao(null);
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse(validate.validateAutorizacaoGroup());
+		
+		parametros = Parametros.of();
+		parametros.setIdentificacao(IntegracaoTest.IDENTIFICACAO);
+		parametros.setModulo(EModulo.CIELO);
+		parametros.setOperacao(EOperacao.AutorizacaoDireta);
+		parametros.setAmbiente(EAmbiente.TESTE);
+		
+		parametros.setValor(10.0);
+		parametros.setPedido(1L);
+		parametros.setBandeira(EBandeira.visa);
+		parametros.setFormaPagamento(EFormaPagamento.CreditoAVista);
+		parametros.setParcelas(1);
+		
+		parametros.setNomePortadorCartao("Teste");
+		parametros.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
+		parametros.setValidadeCartao("202126");
+		parametros.setIndicadorCartao(EIndicadorCartao.Ilegivel);
+//		parametros.setCodigoSegurancaCartao("123");
+		
+		validate = ParametrosValidate.of(parametros);
+		
+		assertTrue(validate.validateAutorizacaoGroup());
+		
 	}
 	
-	@Test(expected = GatewayException.class) 
-	public void deveInvalidarParametrosCancelamento() throws GatewayException {		
-		Parametros parametros =  Parametros.of(EOperacao.Cancelamento, "");
-		ParametrosValidate.of(parametros).validate();
-	}
-	
-	@Test public void deveValidarDadosCartao() {
-		Parametros parametros = Parametros.of(EOperacao.AutorizacaoDireta, null);
-		parametros.setNomePortadorCartao("d");
-		parametros.setNumeroCartao("4234567896541234");
-		parametros.setCodigoSegurancaCartao("123");
-		parametros.setValidadeCartao("200010");
-		parametros.setIndicadorCartao(EIdentificadorCartao.Informado);
-		assertTrue("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		
-		parametros.setNomePortadorCartao(null);
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		
-		parametros.setNomePortadorCartao("asdf");
-		parametros.setNumeroCartao("");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		parametros.setNumeroCartao("2234567896541234");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		parametros.setNumeroCartao("423456789654124");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		
-		parametros.setNumeroCartao("4234567896541234");
-		parametros.setValidadeCartao("");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		parametros.setValidadeCartao("2010");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		
-		parametros.setValidadeCartao("200010");
-		parametros.setCodigoSegurancaCartao("");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		parametros.setCodigoSegurancaCartao("1");
-		assertFalse("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());
-		parametros.setIndicadorCartao(EIdentificadorCartao.Ilegivel);
-		assertTrue("deve retornar null com numero cartão invalido", ParametrosValidate.of(parametros).dadosCartaoValidate());		
-	}
-	
-	@Test public void deveValidarDadosDaTransacao() {
-		
-	}
-
 }
