@@ -17,7 +17,7 @@ GatewayService GatewayService.of();
 Para usar a API em produção, você pode configurar um arquivo properties conforme explicado no tópico #3, assim você pode modificar o ambiente para PRODUCAO, e adicionar a configuração do seu número identificador no gateway.
 Outra forma é usando o construtor estático com todos os parâmetros.
 <pre>
-GatewayService gatewayService = GatewayService.of(String url, String identificacao, EModulo modulo, EAmbiente ambiente);
+GatewayService GatewayService.of(String url, String identificacao, EModulo modulo, EAmbiente ambiente);
 </pre>
 
 ### 1.2) Criando Parametros
@@ -140,17 +140,6 @@ gateway.PRODUCAO.identificador = xxxxxx //sua chave, pois a chave da locaweb nã
 
 Para verificar o andamento das requisições, basta ativar no log4j o pacote 'br.com.flexait'
 
-XML:
-<pre>
-<category name="br.com.flexait">
-	<priority value="debug" />
-	<appender-ref ref="stdout" />
-</category>
-<category name="org.apache.http">
-	<priority value="debug" />
-	<appender-ref ref="stdout" />
-</category>
-</pre>
 Properties:
 <pre>
 log4j.category.org.apache.http=DEBUG
