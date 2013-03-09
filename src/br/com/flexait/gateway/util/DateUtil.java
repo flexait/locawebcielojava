@@ -12,6 +12,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 public class DateUtil {
 
 	private static final String DATE_TIME_MASK = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+	private static final String YEAR_MONTH_MASK = "yyyyMM";
 	
 	public static String format(Object value) {
 		Calendar calendar = (Calendar) value;
@@ -40,6 +41,16 @@ public class DateUtil {
 
 	private static Locale getLocale() {
 		return new Locale("pt-br");
+	}
+
+	public static int getDataAnoMes(Calendar calendar) {
+		SimpleDateFormat sdf = new SimpleDateFormat(YEAR_MONTH_MASK);
+		String string = sdf.format(calendar.getTime());
+		return Integer.valueOf(string);
+	}
+
+	public static Integer getDataAnoMes() {
+		return getDataAnoMes(Calendar.getInstance());
 	}
 
 }

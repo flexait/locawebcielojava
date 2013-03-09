@@ -30,6 +30,7 @@ public class ParametrosValidate {
 		if(messages.size() == 0) {
 			return true;
 		}
+		GatewayService.log.debug(messages);
 		return false;
 	}
 
@@ -38,14 +39,17 @@ public class ParametrosValidate {
 	}
 
 	public boolean validateTidGroup() {
-		return validate(validator.validate(params, DefaultGroup.class, TIdGroup.class));
+		Set<ConstraintViolation<Parametros>> msgs = validator.validate(params, DefaultGroup.class, TIdGroup.class);
+		return validate(msgs);
 	}
 
 	public boolean validateDefaultGroup() {
-		return validate(validator.validate(params, DefaultGroup.class));
+		Set<ConstraintViolation<Parametros>> msgs = validator.validate(params, DefaultGroup.class);
+		return validate(msgs);
 	}
 
 	public boolean validateAutorizacaoGroup() {
-		return validate(validator.validate(params, DefaultGroup.class, AutorizacaoGroup.class));
+		Set<ConstraintViolation<Parametros>> msgs = validator.validate(params, DefaultGroup.class, AutorizacaoGroup.class);
+		return validate(msgs);
 	}
 }

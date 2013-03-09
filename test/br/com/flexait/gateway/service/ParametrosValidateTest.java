@@ -62,7 +62,7 @@ public class ParametrosValidateTest {
 		parametros.setNumeroCartao(null);
 		
 		validate = ParametrosValidate.of(parametros);
-		assertFalse(validate.validateAutorizacaoGroup());
+		assertFalse("deve retornar false com numero cartão nulo", validate.validateAutorizacaoGroup());
 		
 		parametros = Parametros.of();
 		parametros.setIdentificacao(IntegracaoTest.IDENTIFICACAO);
@@ -77,15 +77,19 @@ public class ParametrosValidateTest {
 		parametros.setParcelas(1);
 		
 		parametros.setNomePortadorCartao("Teste");
-		parametros.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
-		parametros.setValidadeCartao("202126");
+		parametros.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
+		parametros.setValidadeCartao("202010");
 		parametros.setIndicadorCartao(EIndicadorCartao.Ilegivel);
-//		parametros.setCodigoSegurancaCartao("123");
+		parametros.setCodigoSegurancaCartao(null);
 		
 		validate = ParametrosValidate.of(parametros);
 		
-		assertTrue(validate.validateAutorizacaoGroup());
+		assertTrue("deve retornar true com os dados validos e codigo segurança null com ilegível", validate.validateAutorizacaoGroup());
 		
+		parametros.setValidadeCartao("200000");
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse(validate.validateAutorizacaoGroup());
 	}
 	
 }

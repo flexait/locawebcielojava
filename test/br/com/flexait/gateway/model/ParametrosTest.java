@@ -2,6 +2,7 @@ package br.com.flexait.gateway.model;
 
 import static org.junit.Assert.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -18,6 +19,8 @@ import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
+import br.com.flexait.gateway.integracao.IntegracaoTest;
+import br.com.flexait.gateway.util.DateUtil;
 
 public class ParametrosTest {
 
@@ -71,23 +74,24 @@ public class ParametrosTest {
 	}
 
 	@Test public void deveRetornarTrueSeIdentificadorNaoInformado() {
+		params.setBandeira(EBandeira.visa);
 		params.setIndicadorCartao(EIndicadorCartao.Ilegivel);
-		boolean codigoValid = params.isCodigoValid();
+		boolean codigoValid = params.isCodigoNotNullValid();
 		assertTrue("deve ser true se identificador nao informado", codigoValid);
 		
 		params.setIndicadorCartao(EIndicadorCartao.Inexistente);
-		codigoValid = params.isCodigoValid();
+		codigoValid = params.isCodigoNotNullValid();
 		assertTrue("deve ser true se identificador nao informado", codigoValid);
 		
 		params.setIndicadorCartao(EIndicadorCartao.NaoInformado);
-		codigoValid = params.isCodigoValid();
+		codigoValid = params.isCodigoNotNullValid();
 		assertTrue("deve ser true se identificador nao informado", codigoValid);
 	}
 	
 	@Test public void deveRetornarTrueSeIdentificadorInformado() {
 		params.setIndicadorCartao(EIndicadorCartao.Informado);
 		params.setCodigoSegurancaCartao("1");
-		boolean codigoValid = params.isCodigoValid();
+		boolean codigoValid = params.isCodigoNotNullValid();
 		assertTrue("deve ser true se identificador nao informado", codigoValid);
 	}
 	
@@ -95,17 +99,52 @@ public class ParametrosTest {
 		params.setIndicadorCartao(EIndicadorCartao.Informado);
 		params.setCodigoSegurancaCartao(null);
 		
-		boolean codigoValid = params.isCodigoValid();
+		boolean codigoValid = params.isCodigoNotNullValid();
 		assertFalse("deve ser true se identificador nao informado", codigoValid);
 		
+		params.setBandeira(EBandeira.visa);
 		params.setIndicadorCartao(EIndicadorCartao.NaoInformado);
-		codigoValid = params.isCodigoValid();
+		codigoValid = params.isCodigoNotNullValid();
 		assertTrue("deve ser true se identificador nao informado", codigoValid);
 	}
 	
 	@Test public void deveValidarPatternCodigo() {
 		boolean matches = "11a".matches(Parametros.PATTERN_CODIGO_SEGURANCA);
 		assertFalse("deve ser false com letra", matches);
+	}
+	
+	@Test public void deveValidarPatternCartao() {
+		boolean matches = IntegracaoTest.NUMERO_CARTAO_MASTERCARD.matches(Parametros.PATTERN_NUMERO_CARTAO);
+		assertTrue("deve ser numero de cartão de credito visa ou mastercard", matches);
+		
+		matches = IntegracaoTest.NUMERO_CARTAO_VISA.matches(Parametros.PATTERN_NUMERO_CARTAO);
+		assertTrue("deve ser numero de cartão de credito visa ou mastercard", matches);
+		
+		matches = "6453010000066167".matches(Parametros.PATTERN_NUMERO_CARTAO);
+		assertFalse("deve ser numero de cartão de credito visa ou mastercard", matches);
+	}
+	
+	@Test public void deveValidarValidadeCartao() {
+		boolean matches = "200013".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "200000".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "200001".matches(Parametros.PATTERN_VALIDADE);
+		assertTrue("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "200013".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "300013".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "100013".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
+		
+		matches = "220013".matches(Parametros.PATTERN_VALIDADE);
+		assertFalse("deve ser data valida no formato aaaamm", matches);
 	}
 	
 	@Test public void deveTratarValorFormaPagamento() {
@@ -134,6 +173,41 @@ public class ParametrosTest {
 		params.setIndicadorCartao(null);
 		string = params.getIndicadorCartaoString();
 		assertNull("deve retornar null quando nulo", string);
+	}
+	
+	@Test public void deveTratarTipoCartao() {
+		params.setBandeira(null);
+		params.setNumeroCartao(null);
+		assertTrue("se nulos retorna true", params.isNumeroCartaoValid());
+		
+		params.setBandeira(EBandeira.mastercard);
+		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
+		assertTrue("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
+		
+		params.setBandeira(EBandeira.visa);
+		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
+		assertTrue("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
+		
+		params.setBandeira(EBandeira.visa);
+		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
+		assertFalse("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
+		
+		params.setBandeira(EBandeira.mastercard);
+		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
+		assertFalse("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
+	}
+	
+	@Test public void deveTratarValidadeCartao() {
+		params.setValidadeCartao(null);
+		assertTrue("deve tratar valor nulo", params.isValidadeCartaoValid());
+		
+		Calendar cal = Calendar.getInstance();
+		
+		params.setValidadeCartao(String.valueOf(DateUtil.getDataAnoMes(cal)));
+		assertTrue("deve igual a " + DateUtil.getDataAnoMes(cal), params.isValidadeCartaoValid());
+		
+		params.setValidadeCartao("200001");
+		assertFalse("deve maior que hoje", params.isValidadeCartaoValid());
 	}
 
 }

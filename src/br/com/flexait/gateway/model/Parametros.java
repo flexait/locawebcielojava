@@ -17,14 +17,15 @@ import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
 import br.com.flexait.gateway.enums.EFormaPagamento;
-import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
 import br.com.flexait.gateway.interfaces.DefaultGroup;
 import br.com.flexait.gateway.interfaces.TIdGroup;
+import br.com.flexait.gateway.util.DateUtil;
 
 import com.google.common.base.Strings;
 
@@ -32,6 +33,8 @@ import com.google.common.base.Strings;
 public class Parametros {
 	
 	protected static final String PATTERN_CODIGO_SEGURANCA = "^[0-9]{3}$";
+	protected static final String PATTERN_NUMERO_CARTAO = "^[4-5][0-9]{15}$";
+	protected static final String PATTERN_VALIDADE = "^2[0-1][0-9]{2}(0[1-9]|1[0-1])$";
 	
 	/** codigo cliente */
 	@NotEmpty(groups = DefaultGroup.class)
@@ -82,31 +85,53 @@ public class Parametros {
 	
 	@Size(max = 16, min = 16, groups = AutorizacaoGroup.class) 
 	@NotEmpty(groups = AutorizacaoGroup.class) 
+	@Pattern(regexp = PATTERN_NUMERO_CARTAO, groups = AutorizacaoGroup.class) 
 	private String numeroCartao;
 	
 	@Size(max = 6, min = 6, groups = AutorizacaoGroup.class) 
 	@NotEmpty(groups = AutorizacaoGroup.class)
+	@Pattern(regexp = PATTERN_VALIDADE, groups = AutorizacaoGroup.class)
 	private String validadeCartao;
 	
 	@NotNull(groups = AutorizacaoGroup.class)
 	private EIndicadorCartao indicadorCartao;
 	
 	@Size(max = 3, min = 3, groups = AutorizacaoGroup.class)
-	@Pattern(regexp = PATTERN_CODIGO_SEGURANCA) 
-	@NotEmpty(groups = AutorizacaoGroup.class)
+	@Pattern(regexp = PATTERN_CODIGO_SEGURANCA, groups = AutorizacaoGroup.class) 
 	private String codigoSegurancaCartao;
 	
 	@NotEmpty(groups = TIdGroup.class)
 	private String tid;
 	
 	@AssertTrue(message = "O código é obrigatório se o indicador for informado", groups = AutorizacaoGroup.class)
-	public boolean isCodigoValid() {
+	public boolean isCodigoNotNullValid() {
 		return (indicadorCartao != EIndicadorCartao.Informado && bandeira == EBandeira.visa) ||
 				!Strings.isNullOrEmpty(codigoSegurancaCartao);
 	}
 	
-	public boolean isCartaoValid() {
+	@AssertTrue(message = "Número do cartão não é válido", groups = AutorizacaoGroup.class)
+	public boolean isNumeroCartaoValid() {
+		if(numeroCartao == null) {
+			return true;
+		}
+		
+		switch (bandeira) {
+		case mastercard:
+			return numeroCartao.startsWith("5");
+			
+		case visa:
+			return numeroCartao.startsWith("4");
+		}
+		
 		return false;
+	}
+	
+	@AssertTrue(message = "Validade do cartão está vencida", groups = AutorizacaoGroup.class)
+	public boolean isValidadeCartaoValid() {
+		if(validadeCartao == null) {
+			return true;
+		}
+		return Integer.valueOf(validadeCartao) >= DateUtil.getDataAnoMes();
 	}
 	
 	public static Parametros of() {
@@ -144,5 +169,5 @@ public class Parametros {
 		}
 		return indicadorCartao.getValor();
 	}
-	
+
 }
