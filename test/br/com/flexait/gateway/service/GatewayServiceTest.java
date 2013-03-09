@@ -2,6 +2,7 @@ package br.com.flexait.gateway.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -24,9 +25,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import br.com.flexait.gateway.enums.EAmbiente;
+import br.com.flexait.gateway.enums.EAutorizar;
+import br.com.flexait.gateway.enums.EBandeira;
+import br.com.flexait.gateway.enums.EFormaPagamento;
+import br.com.flexait.gateway.enums.EIdioma;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EModulo;
+import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
-import br.com.flexait.gateway.integracao.IntegracaoTest;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
@@ -35,6 +41,11 @@ import br.com.flexait.gateway.xml.ParserTest;
 
 public class GatewayServiceTest {
 
+	public static final String IDENTIFICACAO = "1006993069";
+	
+	public static final String NUMERO_CARTAO_MASTERCARD = "5453010000066167";
+	public static final String NUMERO_CARTAO_VISA = "4551870000000183";
+	
 	GatewayService gatewayService;
 	Parametros params;
 	HttpResponse httpResponse;
@@ -43,13 +54,15 @@ public class GatewayServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		params = ParametrosTest.getParams();
-		gatewayService = getService();
+		params = getParametrosRegistro();
+		gatewayService = spy(getService());
 		gatewayService.setParametros(params);
 		
 		httpResponse = prepareResponse(200, ParserTest.getXmlTransacao());
 		when(httpClient.execute(Mockito.any(HttpUriRequest.class))).thenReturn(httpResponse);
 		gatewayService.setHttpClient(httpClient);
+		
+		doReturn(httpClient).when(gatewayService).configScheme(Mockito.any(HttpClient.class));
 	}
 
 	@After
@@ -60,19 +73,17 @@ public class GatewayServiceTest {
 	}
 
 	@Test public void deveConfigurarDadosParamsQuandoSetParams() throws GatewayException {
-		Parametros paramsSpy = spy(params);
+		params = spy(params);
 		
-		GatewayService serviceSpy = spy(gatewayService);
+		gatewayService.setParametros(params);
 		
-		serviceSpy.setParametros(paramsSpy);
+		verify(params).setIdentificacao(Mockito.anyString());
+		verify(params).setModulo(Mockito.any(EModulo.class));
+		verify(params).setAmbiente(Mockito.any(EAmbiente.class));
 		
-		verify(paramsSpy).setIdentificacao(Mockito.anyString());
-		verify(paramsSpy).setModulo(Mockito.any(EModulo.class));
-		verify(paramsSpy).setAmbiente(Mockito.any(EAmbiente.class));
-		
-		assertEquals("Deve ter numero identificacao", IntegracaoTest.IDENTIFICACAO, serviceSpy.getParametros().getIdentificacao());
-		assertEquals("Deve ter numero identificacao", ParametrosTest.CIELO, serviceSpy.getParametros().getModulo());
-		assertEquals("Deve ter numero identificacao", ParametrosTest.TESTE, serviceSpy.getParametros().getAmbiente());
+		assertEquals("Deve ter numero identificacao", IDENTIFICACAO, gatewayService.getParametros().getIdentificacao());
+		assertEquals("Deve ter numero identificacao", ParametrosTest.CIELO, gatewayService.getParametros().getModulo());
+		assertEquals("Deve ter numero identificacao", ParametrosTest.TESTE, gatewayService.getParametros().getAmbiente());
 	}
 	
 	@Test public void deveConfigurarHttpClient() {
@@ -89,14 +100,50 @@ public class GatewayServiceTest {
 	}
 	
 	@Test public void deveExecutarPost() throws GatewayException, Exception {
-		gatewayService = spy(gatewayService);
-		
-		doReturn(httpClient).when(gatewayService).configScheme(Mockito.any(HttpClient.class));
-		
-		Retorno retorno = gatewayService.post(params);
+		Retorno retorno = gatewayService.post(getParametrosRegistro());
 		assertNotNull("Deve retornar objeto deserializado", retorno.getTransacao());
 		
-		verify(gatewayService).setParametros(Mockito.any(Parametros.class));
+		verify(gatewayService).validateParams(Mockito.any(Parametros.class));
+	}
+	
+	@Test public void deveExecutarAutorizacaoDireta() throws GatewayException {
+		Retorno retorno = gatewayService.autorizacaoDireta(params);
+		assertNotNull("Deve retornar objeto deserializado", retorno.getTransacao());
+	}
+	
+	@Test
+	public void deveAutorizarDiretamenteTransacao() throws Exception {
+		Retorno retorno = gatewayService.autorizacaoDireta(params);
+		
+		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
+	}
+	
+	@Test
+	public void deveConsultaTransacao() throws Exception {
+		params.setOperacao(EOperacao.Consulta);
+		Retorno retorno = gatewayService.consultar(params);
+		
+		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
+	}
+	
+	@Test
+	public void deveCapturarTransacao() throws Exception {
+		Retorno retorno = gatewayService.capturar(params);
+		
+		assertNotNull("Deve retornar transação com erro pois a transação de teste está cancelada", retorno.getTransacao());
+	}
+	
+	@Test
+	public void deveCancelarTransacao() throws Exception {
+		Retorno retorno = gatewayService.cancelar(params);
+		
+		assertNotNull("Deve retornar transação com erro devido aos dados do servidor", retorno.getTransacao());
+	}
+	
+	@Test public void deveValidarParametros() throws Exception {
+		params = getParametrosRegistro();
+		boolean valid = gatewayService.validateParams(params);
+		assertTrue("deve retornar true na validação", valid);
 	}
 	
 	@Test public void deveConstruirService() throws Exception {
@@ -130,11 +177,44 @@ public class GatewayServiceTest {
 	private GatewayService getService() {
 		GatewayService service = GatewayService.of(
 			GatewayService.DEFAULT_URL_GATEWAY,
-			IntegracaoTest.IDENTIFICACAO,
+			IDENTIFICACAO,
 			ParametrosTest.CIELO,
 			ParametrosTest.TESTE
 		);
 		
 		return service;
+	}
+	
+	public static Parametros getParametrosRegistro() throws Exception {
+		String numeroCartao = NUMERO_CARTAO_MASTERCARD;
+		String bin = numeroCartao.substring(0, 6);
+		
+		Parametros params = Parametros.of();
+		
+		params.setIdentificacao(IDENTIFICACAO);
+		
+		params.setAmbiente(EAmbiente.TESTE);
+		params.setModulo(EModulo.CIELO);
+		params.setOperacao(EOperacao.AutorizacaoDireta);
+		params.setBinCartao(bin);
+		params.setIdioma(EIdioma.PT);
+		params.setValor(10.00);
+		params.setPedido(1L);
+		params.setDescricao("Pedido de teste");
+		params.setBandeira(EBandeira.mastercard);
+		params.setFormaPagamento(EFormaPagamento.CreditoAVista);
+		params.setParcelas(1);
+		params.setAutorizar(EAutorizar.AutorizarAutenticadaENaoAutenticada);
+		params.setCapturar(false);
+		params.setCampoLivre("Transacao de teste de integracao ESAB");
+		
+		params.setNomePortadorCartao("INTEGRACAO TESTE");
+		params.setNumeroCartao(numeroCartao);
+		params.setValidadeCartao("202012");
+		params.setIndicadorCartao(EIndicadorCartao.Informado);
+		params.setCodigoSegurancaCartao("555");
+		params.setTid("10069930690CDF4F1001");
+		
+		return params;
 	}
 }

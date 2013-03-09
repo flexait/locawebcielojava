@@ -9,15 +9,15 @@ Gateway de Pagamento
 
 Para poder utilizar a API, basta fazer o download do jar disponível em https://github.com/flexait/LocawebCieloJava/tree/master/dist/ e adicioná-lo no seu classpath.
 
-Para usar configurações padrões, basta usar o construtor estático of, sendo neste caso apenas para teste:
+Para usar configurações padrões, basta usar o construtor estático of, sendo neste caso apenas para teste (prefira usar a interface para facilitar usar o mock quando precisar:
 <pre>
-GatewayService GatewayService.of();
+IGatewayService GatewayService.of();
 </pre>
 
 Para usar a API em produção, você pode configurar um arquivo properties conforme explicado no tópico #3, assim você pode modificar o ambiente para PRODUCAO, e adicionar a configuração do seu número identificador no gateway.
 Outra forma é usando o construtor estático com todos os parâmetros.
 <pre>
-GatewayService GatewayService.of(String url, String identificacao, EModulo modulo, EAmbiente ambiente);
+IGatewayService GatewayService.of(String url, String identificacao, EModulo modulo, EAmbiente ambiente);
 </pre>
 
 ### 1.2) Criando Parametros
@@ -144,4 +144,15 @@ Properties:
 <pre>
 log4j.category.org.apache.http=DEBUG
 log4j.category.br.com.flexait=DEBUG
+</pre>
+
+
+
+### 5) Mock para GatewayService
+
+Existe um GatewayMock para facilitar a implementação dos seus testes
+Para isto basta instanciar o GatewayMock ao invés do GatewayService
+
+<pre>
+IGatewayService GatewayMock.of();
 </pre>

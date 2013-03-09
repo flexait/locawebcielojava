@@ -26,6 +26,7 @@ import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
 import br.com.flexait.gateway.interfaces.DefaultGroup;
 import br.com.flexait.gateway.interfaces.TIdGroup;
 import br.com.flexait.gateway.util.DateUtil;
+import br.com.flexait.gateway.util.NumberUtil;
 
 import com.google.common.base.Strings;
 
@@ -34,7 +35,7 @@ public class Parametros {
 	
 	protected static final String PATTERN_CODIGO_SEGURANCA = "^[0-9]{3}$";
 	protected static final String PATTERN_NUMERO_CARTAO = "^[4-5][0-9]{15}$";
-	protected static final String PATTERN_VALIDADE = "^2[0-1][0-9]{2}(0[1-9]|1[0-1])$";
+	protected static final String PATTERN_VALIDADE = "^2[0-1][0-9]{2}(0[1-9]|1[0-2])$";
 	
 	/** codigo cliente */
 	@NotEmpty(groups = DefaultGroup.class)
@@ -168,6 +169,13 @@ public class Parametros {
 			return null;
 		}
 		return indicadorCartao.getValor();
+	}
+
+	public String getValorSemFormato() {
+		if(valor == null) {
+			return null;
+		}
+		return NumberUtil.format(valor);
 	}
 
 }

@@ -60,7 +60,7 @@ public class ParametrosArray {
 		add("ambiente", params.getAmbiente());
 		add("bin_cartao", params.getBinCartao());
 		add("idioma", params.getIdioma());
-		add("valor", params.getValor());
+		add("valor", params.getValorSemFormato());
 		add("pedido", params.getPedido());
 		add("descricao", params.getDescricao());
 		add("bandeira", params.getBandeira());

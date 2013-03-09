@@ -1,6 +1,10 @@
 package br.com.flexait.gateway.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.List;
@@ -14,12 +18,12 @@ import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EAutorizar;
 import br.com.flexait.gateway.enums.EBandeira;
 import br.com.flexait.gateway.enums.EFormaPagamento;
-import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EIdioma;
+import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
-import br.com.flexait.gateway.integracao.IntegracaoTest;
+import br.com.flexait.gateway.service.GatewayServiceTest;
 import br.com.flexait.gateway.util.DateUtil;
 
 public class ParametrosTest {
@@ -114,10 +118,10 @@ public class ParametrosTest {
 	}
 	
 	@Test public void deveValidarPatternCartao() {
-		boolean matches = IntegracaoTest.NUMERO_CARTAO_MASTERCARD.matches(Parametros.PATTERN_NUMERO_CARTAO);
+		boolean matches = GatewayServiceTest.NUMERO_CARTAO_MASTERCARD.matches(Parametros.PATTERN_NUMERO_CARTAO);
 		assertTrue("deve ser numero de cartão de credito visa ou mastercard", matches);
 		
-		matches = IntegracaoTest.NUMERO_CARTAO_VISA.matches(Parametros.PATTERN_NUMERO_CARTAO);
+		matches = GatewayServiceTest.NUMERO_CARTAO_VISA.matches(Parametros.PATTERN_NUMERO_CARTAO);
 		assertTrue("deve ser numero de cartão de credito visa ou mastercard", matches);
 		
 		matches = "6453010000066167".matches(Parametros.PATTERN_NUMERO_CARTAO);
@@ -175,25 +179,39 @@ public class ParametrosTest {
 		assertNull("deve retornar null quando nulo", string);
 	}
 	
+	@Test public void deveTratarValorSemFormato() {
+		params.setValor(null);
+		String valor = params.getValorSemFormato();
+		assertNull("deve ser null", valor);
+		
+		params.setValor(1.00);
+		valor = params.getValorSemFormato();
+		assertEquals("deve ser 100", "100", valor);
+		
+		params.setValor(0.01);
+		valor = params.getValorSemFormato();
+		assertEquals("deve ser 100", "1", valor);
+	}
+	
 	@Test public void deveTratarTipoCartao() {
 		params.setBandeira(null);
 		params.setNumeroCartao(null);
 		assertTrue("se nulos retorna true", params.isNumeroCartaoValid());
 		
 		params.setBandeira(EBandeira.mastercard);
-		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
+		params.setNumeroCartao(GatewayServiceTest.NUMERO_CARTAO_MASTERCARD);
 		assertTrue("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
 		
 		params.setBandeira(EBandeira.visa);
-		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
+		params.setNumeroCartao(GatewayServiceTest.NUMERO_CARTAO_VISA);
 		assertTrue("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
 		
 		params.setBandeira(EBandeira.visa);
-		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_MASTERCARD);
+		params.setNumeroCartao(GatewayServiceTest.NUMERO_CARTAO_MASTERCARD);
 		assertFalse("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
 		
 		params.setBandeira(EBandeira.mastercard);
-		params.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
+		params.setNumeroCartao(GatewayServiceTest.NUMERO_CARTAO_VISA);
 		assertFalse("cartao master deve iniciar por 5", params.isNumeroCartaoValid());
 	}
 	

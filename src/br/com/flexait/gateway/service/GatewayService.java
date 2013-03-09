@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import br.com.flexait.gateway.enums.EAmbiente;
 import br.com.flexait.gateway.enums.EModulo;
+import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.interfaces.IGatewayService;
 import br.com.flexait.gateway.model.Parametros;
@@ -54,6 +55,7 @@ public class GatewayService implements IGatewayService {
 	private HttpPost httpPost;
 	@Getter(value = AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
 	private HttpClient httpClient;
+	private ParametrosValidate validator;
 	
 	/**
 	 * Construtor para uso em produção, usando url padrão e ambiente de produção
@@ -153,8 +155,12 @@ public class GatewayService implements IGatewayService {
 		this.httpPost = new HttpPost(url);
 	}
 
-	public Retorno post(Parametros params) throws GatewayException {
+	protected Retorno post(Parametros params) throws GatewayException {
 		try {
+			boolean isValid = validateParams(params);
+			if(!isValid) {
+				throw new GatewayException("Parâmetros inválidos", new IllegalArgumentException(validator.getMessages().toString()));
+			}
 			setParametros(params);
 		
 			httpClient = configScheme(httpClient);
@@ -201,10 +207,35 @@ public class GatewayService implements IGatewayService {
 		return sch;
 	}
 
-	public HttpClient configScheme(HttpClient httpClient) throws Exception {
+	protected HttpClient configScheme(HttpClient httpClient) throws Exception {
 		Scheme sch = getShema();
 		httpClient.getConnectionManager().getSchemeRegistry().register(sch);
 		return httpClient;
+	}
+
+	protected boolean validateParams(Parametros params) {
+		validator = ParametrosValidate.of(params);
+		return validator.validateAutorizacaoGroup();
+	}
+
+	public Retorno autorizacaoDireta(Parametros params) throws GatewayException {
+		params.setOperacao(EOperacao.Consulta);
+		return post(params);
+	}
+
+	public Retorno consultar(Parametros params) throws GatewayException {
+		params.setOperacao(EOperacao.Consulta);
+		return post(params);
+	}
+
+	public Retorno capturar(Parametros params) throws GatewayException {
+		params.setOperacao(EOperacao.Consulta);
+		return post(params);
+	}
+
+	public Retorno cancelar(Parametros params) throws GatewayException {
+		params.setOperacao(EOperacao.Cancelamento);
+		return post(params);
 	}
 
 }

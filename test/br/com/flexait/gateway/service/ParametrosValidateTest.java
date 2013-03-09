@@ -14,7 +14,6 @@ import br.com.flexait.gateway.enums.EFormaPagamento;
 import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
-import br.com.flexait.gateway.integracao.IntegracaoTest;
 import br.com.flexait.gateway.model.Parametros;
 
 
@@ -23,8 +22,8 @@ public class ParametrosValidateTest {
 	ParametrosValidate validate;
 	
 	@Before
-	public void setUp() {
-		validate = ParametrosValidate.of(IntegracaoTest.getParametrosRegistro());
+	public void setUp() throws Exception {
+		validate = ParametrosValidate.of(GatewayServiceTest.getParametrosRegistro());
 	}
 	
 	@After
@@ -37,8 +36,8 @@ public class ParametrosValidateTest {
 		assertNotNull("deve retornar validator", validate.getValidator());
 	}
 	
-	@Test public void deveValidarBeanTidGroup() {
-		Parametros parametros = IntegracaoTest.getParametrosRegistro();
+	@Test public void deveValidarBeanTidGroup() throws Exception {
+		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
 		parametros.setTid(null);
 		
 		validate = ParametrosValidate.of(parametros);
@@ -49,23 +48,23 @@ public class ParametrosValidateTest {
 		assertTrue("deve ser invalido", validate.validateTidGroup());
 	}
 	
-	@Test public void deveValidarDefaultGroup() {
-		Parametros parametros = IntegracaoTest.getParametrosRegistro();
+	@Test public void deveValidarDefaultGroup() throws Exception {
+		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
 		parametros.setIdentificacao(null);
 		
 		validate = ParametrosValidate.of(parametros);
 		assertFalse("deve ser invalido", validate.validateDefaultGroup());
 	}
 	
-	@Test public void deveValidarAutorizacaoGroup() {
-		Parametros parametros = IntegracaoTest.getParametrosRegistro();
+	@Test public void deveValidarAutorizacaoGroup() throws Exception {
+		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
 		parametros.setNumeroCartao(null);
 		
 		validate = ParametrosValidate.of(parametros);
 		assertFalse("deve retornar false com numero cartão nulo", validate.validateAutorizacaoGroup());
 		
 		parametros = Parametros.of();
-		parametros.setIdentificacao(IntegracaoTest.IDENTIFICACAO);
+		parametros.setIdentificacao(GatewayServiceTest.IDENTIFICACAO);
 		parametros.setModulo(EModulo.CIELO);
 		parametros.setOperacao(EOperacao.AutorizacaoDireta);
 		parametros.setAmbiente(EAmbiente.TESTE);
@@ -77,8 +76,8 @@ public class ParametrosValidateTest {
 		parametros.setParcelas(1);
 		
 		parametros.setNomePortadorCartao("Teste");
-		parametros.setNumeroCartao(IntegracaoTest.NUMERO_CARTAO_VISA);
-		parametros.setValidadeCartao("202010");
+		parametros.setNumeroCartao(GatewayServiceTest.NUMERO_CARTAO_VISA);
+		parametros.setValidadeCartao("202212");
 		parametros.setIndicadorCartao(EIndicadorCartao.Ilegivel);
 		parametros.setCodigoSegurancaCartao(null);
 		
