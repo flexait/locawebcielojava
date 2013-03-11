@@ -1,5 +1,6 @@
 package br.com.flexait.gateway.xml;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -13,7 +14,6 @@ import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.model.Transacao;
-import br.com.flexait.gateway.xml.Parser;
 
 public class ParserTest {
 
@@ -44,6 +44,13 @@ public class ParserTest {
 		retorno = getRetornoErro();
 		assertNull("Objeto deve ser null", retorno.getTransacao());
 		assertNotNull("Objeto deve ser retornardo", retorno.getErro());
+	}
+	
+	@Test public void deveRetornarValorNormalizado() throws Exception {
+		String xml = getXmlTransacao();
+		InputStream inputStream = IOUtils.toInputStream(xml);
+		Transacao t = (Transacao) Parser.of(inputStream).toObject();
+		assertEquals("deve retornar 1.01", 1.01,  t.getDadosPedido().getValor(), 0.01);
 	}
 
 	public static Retorno getRetornoErro() throws Exception, IOException {
@@ -80,7 +87,7 @@ public class ParserTest {
 		sb.append("<tid>10017348980401201001</tid>");
 		sb.append("<dados-pedido>");
 		sb.append("<numero>1</numero>");
-		sb.append("<valor>100</valor>");
+		sb.append("<valor>101</valor>");
 		sb.append("<moeda>986</moeda>");
 		sb.append("<data-hora>2010-04-27T17:49:50.120-03:00</data-hora>");
 		sb.append("<descricao>Pedido de teste</descricao>");

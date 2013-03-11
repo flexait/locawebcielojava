@@ -5,6 +5,7 @@ import java.util.Calendar;
 import lombok.Data;
 import br.com.flexait.gateway.enums.EIdioma;
 import br.com.flexait.gateway.xml.CalendarConverter;
+import br.com.flexait.gateway.xml.DoubleConverter;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
@@ -15,6 +16,7 @@ public class DadosPedido {
 	
 	private long numero;
 	
+	@XStreamConverter(DoubleConverter.class)
 	private double valor;
 	
 	private int moeda;

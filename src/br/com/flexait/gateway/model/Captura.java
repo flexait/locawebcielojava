@@ -5,6 +5,7 @@ import java.util.Calendar;
 import lombok.Data;
 
 import br.com.flexait.gateway.xml.CalendarConverter;
+import br.com.flexait.gateway.xml.DoubleConverter;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
@@ -20,6 +21,7 @@ public class Captura {
 	@XStreamAlias("data-hora") @XStreamConverter(CalendarConverter.class)
 	private Calendar dataHora;
 	
+	@XStreamConverter(DoubleConverter.class)
 	private double valor;
 	
 }

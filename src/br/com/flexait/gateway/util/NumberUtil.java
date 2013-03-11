@@ -11,4 +11,9 @@ public class NumberUtil {
 		return format.replace(".", "").replaceFirst("^0+", "");
 	}
 
+	public static double parse(String value) {
+		Double d = Double.valueOf(value);
+		return d / 100.0;
+	}
+
 }

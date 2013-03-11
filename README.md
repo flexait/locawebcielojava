@@ -156,3 +156,9 @@ Para isto basta instanciar o GatewayMock ao invés do GatewayService
 <pre>
 IGatewayService GatewayMock.of();
 </pre>
+
+
+
+### 6) Dependências
+
+Veja as dependências no pom.xml em https://github.com/flexait/LocawebCieloJava/blob/master/pom.xml
