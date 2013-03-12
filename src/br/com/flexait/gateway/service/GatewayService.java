@@ -157,11 +157,12 @@ public class GatewayService implements IGatewayService {
 
 	protected Retorno post(Parametros params) throws GatewayException {
 		try {
+			setParametros(params);
+			
 			boolean isValid = validateParams(params);
 			if(!isValid) {
 				throw new GatewayException("Parâmetros inválidos", new IllegalArgumentException(validator.getMessages().toString()));
 			}
-			setParametros(params);
 		
 			httpClient = configScheme(httpClient);
 			
@@ -171,7 +172,11 @@ public class GatewayService implements IGatewayService {
 			
 			InputStream content = response.getEntity().getContent();
 			
-			return Parser.of(content).getRetorno();
+			Retorno retorno = Parser.of(content).getRetorno();
+			
+			retorno.setOperacao(params.getOperacao());
+			
+			return retorno;
 			
 		} catch (Exception e) {
 			throw new GatewayException("Ocorreu um problema ao executar o post", e);
@@ -219,7 +224,7 @@ public class GatewayService implements IGatewayService {
 	}
 
 	public Retorno autorizacaoDireta(Parametros params) throws GatewayException {
-		params.setOperacao(EOperacao.Consulta);
+		params.setOperacao(EOperacao.AutorizacaoDireta);
 		return post(params);
 	}
 
@@ -229,7 +234,7 @@ public class GatewayService implements IGatewayService {
 	}
 
 	public Retorno capturar(Parametros params) throws GatewayException {
-		params.setOperacao(EOperacao.Consulta);
+		params.setOperacao(EOperacao.Captura);
 		return post(params);
 	}
 

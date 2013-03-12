@@ -115,14 +115,15 @@ public class GatewayServiceTest {
 	public void deveAutorizarDiretamenteTransacao() throws Exception {
 		Retorno retorno = gatewayService.autorizacaoDireta(params);
 		
+		assertEquals("Operação deve ser Autorizacao", EOperacao.AutorizacaoDireta, retorno.getOperacao());
 		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 	}
 	
 	@Test
 	public void deveConsultaTransacao() throws Exception {
-		params.setOperacao(EOperacao.Consulta);
 		Retorno retorno = gatewayService.consultar(params);
 		
+		assertEquals("Operação deve ser consulta", EOperacao.Consulta, retorno.getOperacao());
 		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 	}
 	
@@ -130,6 +131,7 @@ public class GatewayServiceTest {
 	public void deveCapturarTransacao() throws Exception {
 		Retorno retorno = gatewayService.capturar(params);
 		
+		assertEquals("Operação deve ser consulta", EOperacao.Captura, retorno.getOperacao());
 		assertNotNull("Deve retornar transação com erro pois a transação de teste está cancelada", retorno.getTransacao());
 	}
 	
@@ -137,6 +139,7 @@ public class GatewayServiceTest {
 	public void deveCancelarTransacao() throws Exception {
 		Retorno retorno = gatewayService.cancelar(params);
 		
+		assertEquals("Operação deve ser consulta", EOperacao.Cancelamento, retorno.getOperacao());
 		assertNotNull("Deve retornar transação com erro devido aos dados do servidor", retorno.getTransacao());
 	}
 	
