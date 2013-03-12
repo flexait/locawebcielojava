@@ -18,4 +18,8 @@ public class Retorno {
 		return retorno;
 	}
 	
+	public boolean hasErro() {
+		return erro != null;
+	}
+	
 }

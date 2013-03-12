@@ -99,6 +99,21 @@ public class ParserTest {
 		sb.append("<parcelas>1</parcelas>");
 		sb.append("</forma-pagamento>");
 		sb.append("<status>1</status>");
+		sb.append("<autenticacao>");
+		sb.append("<codigo>9</codigo>");
+		sb.append("<mensagem>Transacao sem autenticacao</mensagem>");
+		sb.append("<data-hora>2010-04-27T18:35:00.454-03:00</data-hora>");
+		sb.append("<valor>100</valor>");
+		sb.append("<eci>7</eci>");
+		sb.append("</autenticacao>");
+		sb.append("<autorizacao>");
+		sb.append("<codigo>9</codigo>");
+		sb.append("<mensagem>Transação autorizada</mensagem>");
+		sb.append("<data-hora>2010-04-27T18:35:00.502-03:00</data-hora>");
+		sb.append("<valor>100</valor>");
+		sb.append("<lr>00</lr>");
+		sb.append("<arp>183501</arp>");
+		sb.append("</autorizacao>");
 		sb.append("<url-autenticacao>https://qasecommerce.cielo.com.br/web/index.cbmp?id=d75b93d1edbc1a84fcf716ba727c4c5c</url-autenticacao>");
 		sb.append("</transacao>");
 		

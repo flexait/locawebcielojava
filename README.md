@@ -129,6 +129,7 @@ Properties:
 gateway.ambiente = TESTE
 gateway.modulo = CIELO
 gateway.url = https://comercio.locaweb.com.br/comercio.comp
+gateway.encode = ISO-8859-1 //codificação de retorno da sua aplicação
 
 gateway.TESTE.identificador = 1006993069
 gateway.PRODUCAO.identificador = xxxxxx //sua chave, pois a chave da locaweb não funciona

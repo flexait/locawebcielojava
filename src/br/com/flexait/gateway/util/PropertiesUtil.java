@@ -17,9 +17,10 @@ public class PropertiesUtil extends Properties {
 	protected static final String GATEWAY_AMBIENTE = "gateway.ambiente";
 	protected static final String GATEWAY_MODULO = "gateway.modulo";
 	protected static final String GATEWAY_URL = "gateway.url";
+	protected static final String GATEWAY_ENCODE = "gateway.encode";
 	protected static final String GATEWAY_IDENTIFICADOR = "gateway.%s.identificador";
-
 	protected static final String GATEWAY_FILE = "/gateway.properties";
+
 	@Setter private EAmbiente ambiente;	
 	
 	PropertiesUtil() throws Exception {
@@ -73,6 +74,10 @@ public class PropertiesUtil extends Properties {
 	public EModulo getModulo() {
 		String modulo = get(GATEWAY_MODULO);
 		return EModulo.valueOf(modulo);
+	}
+	
+	public String getEncode() {
+		return get(GATEWAY_ENCODE);
 	}
 
 }

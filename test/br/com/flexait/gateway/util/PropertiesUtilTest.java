@@ -43,6 +43,12 @@ public class PropertiesUtilTest {
 		
 	}
 	
+	@Test
+	public void deveRetornarEncode() throws Exception {
+		String encode = PropertiesUtil.of().getEncode();
+		assertEquals("Valor deve ser CIELO", "ISO-8859-1", encode);
+	}
+	
 	@Test(expected = GatewayException.class)
 	public void deveDarErroSeArquivoInvalidor() throws Exception {
 		

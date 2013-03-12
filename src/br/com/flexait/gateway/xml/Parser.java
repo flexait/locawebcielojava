@@ -10,6 +10,7 @@ import br.com.flexait.gateway.model.Erro;
 import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.model.Transacao;
 import br.com.flexait.gateway.service.GatewayService;
+import br.com.flexait.gateway.util.PropertiesUtil;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -37,7 +38,7 @@ public class Parser {
 		xstream.processAnnotations(Transacao.class);
 		xstream.processAnnotations(Erro.class);
 		
-		String toString = IOUtils.toString(is, "ISO-8859-1");
+		String toString = IOUtils.toString(is, PropertiesUtil.of().getEncode());
 		
 		GatewayService.log.debug("\nXML de resposta:\n" + toString);
 		
