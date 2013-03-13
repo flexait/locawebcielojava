@@ -1,5 +1,6 @@
 package br.com.flexait.gateway.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -89,6 +90,23 @@ public class ParametrosValidateTest {
 		
 		validate = ParametrosValidate.of(parametros);
 		assertFalse(validate.validateAutorizacaoGroup());
+	}
+	
+	@Test
+	public void deveRetornarMensagensDeErroNormalizada() throws Exception {
+		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
+		parametros.setValidadeCartao("201212");
+		
+		ParametrosValidate validate = ParametrosValidate.of(parametros);
+		validate.validate();
+		String erros = validate.getErros();
+		assertEquals("deve retornar Numero do " + Parametros.MSG_VALIDADE_VENCIDA, 
+				Parametros.MSG_VALIDADE_VENCIDA + "; ", erros);		
+	}
+	
+	@Test
+	public void deveTratarMensagensNulas() {
+		ParametrosValidate.of(null).getErros();
 	}
 	
 }

@@ -33,6 +33,9 @@ import com.google.common.base.Strings;
 @Data
 public class Parametros {
 	
+	public static final String MSG_VALIDADE_VENCIDA = "Validade do cartão está vencida";
+	private static final String MSG_NUMERO_INVALIDO = "Número do cartão não é válido";
+	private static final String MSG_CODIGO_OBRIGATORIO = "O código é obrigatório se o indicador for informado";
 	protected static final String PATTERN_CODIGO_SEGURANCA = "^[0-9]{3}$";
 	protected static final String PATTERN_NUMERO_CARTAO = "^[4-5][0-9]{15}$";
 	protected static final String PATTERN_VALIDADE = "^2[0-1][0-9]{2}(0[1-9]|1[0-2])$";
@@ -104,13 +107,13 @@ public class Parametros {
 	@NotEmpty(groups = TIdGroup.class)
 	private String tid;
 	
-	@AssertTrue(message = "O código é obrigatório se o indicador for informado", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = MSG_CODIGO_OBRIGATORIO, groups = AutorizacaoGroup.class)
 	public boolean isCodigoNotNullValid() {
 		return (indicadorCartao != EIndicadorCartao.Informado && bandeira == EBandeira.visa) ||
 				!Strings.isNullOrEmpty(codigoSegurancaCartao);
 	}
 	
-	@AssertTrue(message = "Número do cartão não é válido", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = MSG_NUMERO_INVALIDO, groups = AutorizacaoGroup.class)
 	public boolean isNumeroCartaoValid() {
 		if(numeroCartao == null) {
 			return true;
@@ -127,7 +130,7 @@ public class Parametros {
 		return false;
 	}
 	
-	@AssertTrue(message = "Validade do cartão está vencida", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = MSG_VALIDADE_VENCIDA, groups = AutorizacaoGroup.class)
 	public boolean isValidadeCartaoValid() {
 		if(validadeCartao == null) {
 			return true;

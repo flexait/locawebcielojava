@@ -1,5 +1,6 @@
 package br.com.flexait.gateway.service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -9,6 +10,7 @@ import javax.validation.Validator;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
 import br.com.flexait.gateway.interfaces.DefaultGroup;
 import br.com.flexait.gateway.interfaces.TIdGroup;
@@ -23,6 +25,7 @@ public class ParametrosValidate {
 	ParametrosValidate(Parametros params) {
 		this.params = params;
 		validator = Validation.buildDefaultValidatorFactory().getValidator();
+		messages = new HashSet<>();
 	}
 	
 	protected boolean validate(Set<ConstraintViolation<Parametros>> messages) {
@@ -51,5 +54,21 @@ public class ParametrosValidate {
 	public boolean validateAutorizacaoGroup() {
 		Set<ConstraintViolation<Parametros>> msgs = validator.validate(params, DefaultGroup.class, AutorizacaoGroup.class);
 		return validate(msgs);
+	}
+
+	public boolean validate() {
+		if(params.getOperacao() == EOperacao.AutorizacaoDireta) {
+			return validateAutorizacaoGroup();
+		}
+		return validateTidGroup();
+	}
+
+	public String getErros() {
+		StringBuilder sb = new StringBuilder();
+		for(ConstraintViolation<Parametros> m: messages) {
+			sb.append(m.getMessage());
+			sb.append("; ");
+		}
+		return sb.toString();
 	}
 }

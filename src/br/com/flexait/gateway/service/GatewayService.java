@@ -56,30 +56,7 @@ public class GatewayService implements IGatewayService {
 	@Getter(value = AccessLevel.PROTECTED) @Setter(AccessLevel.PROTECTED)
 	private HttpClient httpClient;
 	private ParametrosValidate validator;
-	
-	/**
-	 * Construtor para uso em produção, usando url padrão e ambiente de produção
-	 * @param paramsDefault.identificacao
-	 * @param paramsDefault.modulo
-	 * @throws Exception 
-	 */
-	GatewayService() throws Exception {
-		super();
-		PropertiesUtil util = PropertiesUtil.of();
-		EAmbiente amb = util.getAmbiente();
-		String identificador = util.getIdentificador();
-		EModulo mod = util.getModulo();
-		String url = util.getUrl();
-		
-		this.httpClient = new DefaultHttpClient();
-		this.setUrl(url);
-		this.identificacao = identificador;
-		
-		this.ambiente = amb;
-		this.modulo = mod;
-		
-		logConstruct(url, identificacao, ambiente);
-	}
+	private PropertiesUtil util;
 	
 	/**
 	 * Construtor principal
@@ -130,7 +107,14 @@ public class GatewayService implements IGatewayService {
 	 * @throws Exception
 	 */
 	public static GatewayService of() throws Exception {
-		return new GatewayService();
+		PropertiesUtil util = getPropertiesUtil();
+		return new GatewayService(
+			util.getUrl(), util.getIdentificador(), util.getModulo(), util.getAmbiente()
+		);
+	}
+	
+	protected static PropertiesUtil getPropertiesUtil() throws Exception {
+		return PropertiesUtil.of();
 	}
 	
 	protected void setParametros(Parametros parametros) throws GatewayException {
@@ -161,7 +145,8 @@ public class GatewayService implements IGatewayService {
 			
 			boolean isValid = validateParams(params);
 			if(!isValid) {
-				throw new GatewayException("Parâmetros inválidos", new IllegalArgumentException(validator.getMessages().toString()));
+				throw new GatewayException("Parâmetros inválidos", 
+						new IllegalArgumentException(validator.getErros()));
 			}
 		
 			httpClient = configScheme(httpClient);
@@ -220,7 +205,7 @@ public class GatewayService implements IGatewayService {
 
 	protected boolean validateParams(Parametros params) {
 		validator = ParametrosValidate.of(params);
-		return validator.validateAutorizacaoGroup();
+		return validator.validate();
 	}
 
 	public Retorno autorizacaoDireta(Parametros params) throws GatewayException {

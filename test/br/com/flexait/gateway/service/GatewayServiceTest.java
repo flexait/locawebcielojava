@@ -36,7 +36,6 @@ import br.com.flexait.gateway.exception.GatewayException;
 import br.com.flexait.gateway.model.Parametros;
 import br.com.flexait.gateway.model.ParametrosTest;
 import br.com.flexait.gateway.model.Retorno;
-import br.com.flexait.gateway.util.PropertiesUtil;
 import br.com.flexait.gateway.xml.ParserTest;
 
 public class GatewayServiceTest {
@@ -147,21 +146,6 @@ public class GatewayServiceTest {
 		params = getParametrosRegistro();
 		boolean valid = gatewayService.validateParams(params);
 		assertTrue("deve retornar true na validação", valid);
-	}
-	
-	@Test public void deveConstruirService() throws Exception {
-		GatewayService service = GatewayService.of();
-		assertEquals(service.getAmbiente(), EAmbiente.TESTE);
-		assertEquals(service.getModulo(), EModulo.CIELO);
-		assertEquals(service.getIdentificacao(), "1006993069");
-		assertEquals(service.getUrl(), "https://comercio.locaweb.com.br/comercio.comp");
-	}
-	
-	@Test public void devePegarIdentificadorDoProperties() throws Exception {
-		
-		String identificador = PropertiesUtil.of().getIdentificador();
-		assertEquals("Deve retornar 1006993069", "1006993069", identificador);
-		
 	}
 	
 	private HttpResponse prepareResponse(int expectedResponseStatus,
