@@ -23,10 +23,6 @@ public class PropertiesUtil extends Properties {
 
 	@Setter private EAmbiente ambiente;	
 	
-	PropertiesUtil() throws Exception {
-		this(GATEWAY_FILE);
-	}
-	
 	PropertiesUtil(String file) throws Exception  {
 		super();
 		try {
@@ -43,11 +39,12 @@ public class PropertiesUtil extends Properties {
 				e
 			);
 		}
-		ambiente = getAmbiente();
 	}
 
 	public static PropertiesUtil of() throws Exception {
-		return new PropertiesUtil();
+		PropertiesUtil util = new PropertiesUtil(GATEWAY_FILE);
+		util.getAmbiente();
+		return util;
 	}
 	
 	public static PropertiesUtil of(String file) throws Exception {
@@ -63,8 +60,9 @@ public class PropertiesUtil extends Properties {
 	}
 
 	public EAmbiente getAmbiente() {
-		String ambiente = get(GATEWAY_AMBIENTE);
-		return EAmbiente.valueOf(ambiente);
+		String amb = get(GATEWAY_AMBIENTE);
+		ambiente = EAmbiente.valueOf(amb);
+		return ambiente;
 	}
 
 	public String getUrl() {

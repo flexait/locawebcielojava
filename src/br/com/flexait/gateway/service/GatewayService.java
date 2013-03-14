@@ -84,7 +84,7 @@ public class GatewayService implements IGatewayService {
 		sb.append("\n\tURL = " + url);
 		sb.append("\n\tIdentificacao = " + identificacao);
 		sb.append("\n\tAmbiente = " + ambiente);
-		log.debug("\n=====================================================================================================\n");
+		log.debug("=====================================================================================================\n");
 		log.debug(sb.toString());
 	}
 	
@@ -145,8 +145,9 @@ public class GatewayService implements IGatewayService {
 			
 			boolean isValid = validateParams(params);
 			if(!isValid) {
-				throw new GatewayException("Parâmetros inválidos", 
-						new IllegalArgumentException(validator.getErros()));
+				String erros = "Erros de validação: " + validator.getErros();
+				log.debug(erros);
+				throw new GatewayException(erros, new IllegalArgumentException(erros));
 			}
 		
 			httpClient = configScheme(httpClient);
@@ -203,7 +204,7 @@ public class GatewayService implements IGatewayService {
 		return httpClient;
 	}
 
-	protected boolean validateParams(Parametros params) {
+	protected boolean validateParams(Parametros params) throws Exception {
 		validator = ParametrosValidate.of(params);
 		return validator.validate();
 	}

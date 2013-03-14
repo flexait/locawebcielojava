@@ -11,6 +11,8 @@ import br.com.flexait.gateway.xml.ParserTest;
 
 public class GatewayMock implements IGatewayService {
 	
+	private ParametrosValidate validate;
+
 	protected static Retorno OK() throws GatewayException, Exception {
 		return ParserTest.getRetornoTransacao();
 	}
@@ -60,12 +62,14 @@ public class GatewayMock implements IGatewayService {
 	
 	private boolean getPropertiesAndValidateTransacao(Parametros params) throws Exception {
 		params = getPropertiesParameters(params);
-		return ParametrosValidate.of(params).validateAutorizacaoGroup();
+		validate = ParametrosValidate.of(params);
+		return validate.validateAutorizacaoGroup();
 	}
 
 	private boolean getPropertiesAndValidateTid(Parametros params) throws Exception {
 		params = getPropertiesParameters(params);
-		return ParametrosValidate.of(params).validateTidGroup();
+		validate = ParametrosValidate.of(params);
+		return validate.validateTidGroup();
 	}
 
 	public static GatewayMock of() {

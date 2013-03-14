@@ -40,7 +40,7 @@ public class Parser {
 		
 		String toString = IOUtils.toString(is, PropertiesUtil.of().getEncode());
 		
-		GatewayService.log.debug("\nXML de resposta:\n" + toString);
+		GatewayService.log.debug("XML de resposta: " + toString);
 		
 		return xstream.fromXML(toString);
 	}
@@ -59,7 +59,9 @@ public class Parser {
 			erro = (Erro) object;
 		}
 		else {
-			throw new GatewayException("Não é possível deserializar o xml");
+			String erroSerializacao = "Não é possível deserializar o xml";
+			GatewayService.log.error(erroSerializacao);
+			throw new GatewayException(erroSerializacao);
 		}
 		
 		return Retorno.of(transacao, erro);
