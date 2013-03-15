@@ -38,6 +38,8 @@ import br.com.flexait.gateway.model.Retorno;
 import br.com.flexait.gateway.util.PropertiesUtil;
 import br.com.flexait.gateway.xml.Parser;
 
+import com.thoughtworks.xstream.converters.ConversionException;
+
 @Data
 public class GatewayService implements IGatewayService {
 
@@ -164,7 +166,10 @@ public class GatewayService implements IGatewayService {
 			
 			return retorno;
 			
-		} catch (Exception e) {
+		} catch (ConversionException e) {
+			throw new GatewayException("Ocorreu um erro ao executar o post: " + e.getMessage());
+		} 
+		catch (Exception e) {
 			throw new GatewayException("Ocorreu um problema ao executar o post", e);
 		}
 	}
