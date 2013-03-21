@@ -8,7 +8,7 @@ public class NumberUtil {
 		DecimalFormat df = new DecimalFormat("#.00");
 		
 		String format = df.format(value);
-		return format.replace(".", "").replaceFirst("^0+", "");
+		return format.replace(".", "").replace(",", "").replaceFirst("^0+", "");
 	}
 
 	public static double parse(String value) {
