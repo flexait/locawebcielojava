@@ -55,11 +55,11 @@ public class Parametros {
 	
 	private EIdioma idioma;
 	
-	@Min(value = 1, groups = AutorizacaoGroup.class)
+	@Min(value = 1, groups = AutorizacaoGroup.class, message = "{field} deve ser maior ou igual a {value}")
 	@NotNull(groups = AutorizacaoGroup.class)
 	private Double valor; //dados do pedido
 	
-	@Min(value = 1L, groups = AutorizacaoGroup.class)
+	@Min(value = 1L, groups = AutorizacaoGroup.class, message = "{field} deve ser maior ou igual a {value}")
 	@NotNull(groups = AutorizacaoGroup.class)
 	private Long pedido; //numero do pedido
 	

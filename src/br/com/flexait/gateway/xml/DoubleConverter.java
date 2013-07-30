@@ -16,7 +16,7 @@ public class DoubleConverter implements Converter {
 
 	public void marshal(Object value, HierarchicalStreamWriter writer,
             MarshallingContext context) {
-		writer.setValue(NumberUtil.format((double)value));
+		writer.setValue(NumberUtil.format((Double)value));
 	}
 
 	public Object unmarshal(HierarchicalStreamReader reader,

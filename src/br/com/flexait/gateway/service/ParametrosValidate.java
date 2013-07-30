@@ -18,7 +18,7 @@ import br.com.flexait.gateway.util.PropertiesUtil;
 
 public class ParametrosValidate {
 	
-	private static final String VALIDATION_MESSAGES = "/ValidationMessages.properties";
+	private static final String VALIDATION_MESSAGES = "/ValidationMessagesGateway.properties";
 	
 	private Parametros params;
 	@Getter(value = AccessLevel.PROTECTED) private Validator validator;
@@ -29,7 +29,7 @@ public class ParametrosValidate {
 	ParametrosValidate(Parametros params) throws Exception {
 		this.params = params;
 		validator = getValidatorClass();
-		messages = new HashSet<>();
+		messages = new HashSet<ConstraintViolation<Parametros>>();
 		util = PropertiesUtil.of(VALIDATION_MESSAGES);
 	}
 
