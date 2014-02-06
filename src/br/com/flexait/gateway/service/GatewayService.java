@@ -77,7 +77,8 @@ public class GatewayService implements IGatewayService {
 		this.modulo = modulo;
 		this.ambiente = ambiente;
 		
-		logConstruct(url, identificacao, ambiente);
+		if(log.isDebugEnabled())
+			logConstruct(url, identificacao, ambiente);
 	}
 
 	private void logConstruct(String url, String identificacao, EAmbiente ambiente) {
@@ -154,7 +155,8 @@ public class GatewayService implements IGatewayService {
 		
 			httpClient = configScheme(httpClient);
 			
-			log.debug("Post com os parametros:\n\t" + IOUtils.toString(httpPost.getEntity().getContent()));
+			if(log.isDebugEnabled())
+				log.debug("Post com os parametros:\n\t" + IOUtils.toString(httpPost.getEntity().getContent()));
 			
 			HttpResponse response = httpClient.execute(httpPost);
 			
@@ -167,9 +169,11 @@ public class GatewayService implements IGatewayService {
 			return retorno;
 			
 		} catch (ConversionException e) {
+			log.error(e);
 			throw new GatewayException("Ocorreu um erro ao executar o post: " + e.getMessage());
 		} 
 		catch (Exception e) {
+			log.error(e);
 			throw new GatewayException("Ocorreu um problema ao executar o post", e);
 		}
 	}

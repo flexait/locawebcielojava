@@ -20,12 +20,8 @@ public class Parser {
 	private InputStream is;
 	
 	Parser(InputStream is) {
-		construct();
-		this.is = is;
-	}
-	
-	private void construct() {
 		xstream = new XStream();
+		this.is = is;
 	}
 	
 	public static Parser of(InputStream is) throws IOException {
