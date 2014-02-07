@@ -108,7 +108,7 @@
 		<url>git@github.com:flexait/LocawebCieloJava</url>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<distributionManagement>
 		<repository>
 			<id>sonatype-nexus-staging</id>

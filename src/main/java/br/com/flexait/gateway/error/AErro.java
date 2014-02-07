@@ -2,11 +2,11 @@ package br.com.flexait.gateway.error;
 
 public abstract class AErro {
 	
-	abstract String getCodigo();
+	public abstract String getCodigo();
 	
-	abstract String getMensagem();
+	public abstract String getMensagem();
 	
-	abstract String getDescricao();
+	public abstract String getDescricao();
 
 	@Override
 	public String toString() {

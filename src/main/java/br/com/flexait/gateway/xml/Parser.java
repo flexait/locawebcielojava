@@ -37,8 +37,21 @@ public class Parser {
 		String toString = IOUtils.toString(is, PropertiesUtil.of().getEncode());
 		
 		GatewayService.log.debug("XML de resposta: " + toString);
+		Object fromXML = null;
 		
-		return xstream.fromXML(toString);
+		try {
+			fromXML = xstream.fromXML(toString);
+		} catch (Exception e) {
+			GatewayService.log.error(e);
+			
+			Erro erro = new Erro();
+			erro.setCodigo("EINV");
+			erro.setMensagem("Erro de parse do xml: " + toString);
+			erro.setDetalhes("EINV");
+			return erro;					
+		}
+		
+		return fromXML;
 	}
 
 	public Retorno getRetorno() throws Exception {

@@ -11,7 +11,7 @@ public enum ETipoErro {
 	E030, E031, E032, E033,
 	E040, E041, E042,
 	E099, E999,
-	NENHUM;
+	NENHUM, EINV;
 
 	public static ETipoErro get(String erro) {
 		if(Strings.isNullOrEmpty(erro)) {

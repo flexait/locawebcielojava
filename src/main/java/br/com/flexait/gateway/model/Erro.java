@@ -126,6 +126,10 @@ public class Erro {
 			detalhes = new Erro999();
 			break;
 			
+		case EINV:
+			detalhes = new ErroInv();
+			break;
+			
 		case NENHUM:
 
 		default:
