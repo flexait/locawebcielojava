@@ -7,29 +7,17 @@ Gateway de Pagamento
 
 ### 1.1) Construtores e Configurações
 
-Para poder utilizar a API, basta adicionar o repositório snapshot:
-
-```
-<repositories>
-	<repository>
-		<id>sonatype-oss-snapshot</id>
-		<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		<snapshots>
-			<enabled>true</enabled>
-		</snapshots>
-	</repository>		
-</repositories>
-```
-
-E adicionar a dependência:
+Para poder utilizar a API basta adicionar a dependência:
 
 ```
 <dependency>
 	<groupId>br.com.flexait</groupId>
 	<artifactId>locaweb-cielo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 </dependency>
 ```
+
+Caso deseje usar a versão estável apenas adicione a dependencia sem a palavra SNAPSHOT. Não há necessidade de d
 
 Para usar configurações padrões, basta usar o construtor estático of, sendo neste caso apenas para teste (prefira usar a interface para facilitar usar o mock quando precisar:
 ```
