@@ -9,7 +9,7 @@
 
 	<groupId>br.com.flexait</groupId>
 	<artifactId>locaweb-cielo</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -147,7 +147,7 @@
 		<connection>scm:git:git@github.com:flexait/LocawebCieloJava</connection>
 		<developerConnection>scm:git:git@github.com:flexait/LocawebCieloJava.git</developerConnection>
 		<url>git@github.com:flexait/LocawebCieloJava</url>
-		<tag>HEAD</tag>
+		<tag>locaweb-cielo-0.0.3</tag>
 	</scm>
 
 	<distributionManagement>
