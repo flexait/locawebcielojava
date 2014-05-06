@@ -17,7 +17,7 @@ Para poder utilizar a API basta adicionar a dependência:
 </dependency>
 ```
 
-Caso deseje usar a versão estável apenas adicione a dependencia sem a palavra SNAPSHOT. Não há necessidade de d
+Você pode fazer o download da release em https://github.com/flexait/LocawebCieloJava/releases
 
 Para usar configurações padrões, basta usar o construtor estático of, sendo neste caso apenas para teste (prefira usar a interface para facilitar usar o mock quando precisar:
 ```
