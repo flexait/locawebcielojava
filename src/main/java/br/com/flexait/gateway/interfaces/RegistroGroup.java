@@ -1,5 +1,5 @@
 package br.com.flexait.gateway.interfaces;
 
-public interface AutorizacaoGroup {
+public interface RegistroGroup {
 
 }

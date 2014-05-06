@@ -13,4 +13,6 @@ public interface IGatewayService {
 
 	Retorno cancelar(Parametros params) throws Exception;
 
+	Retorno registro(Parametros params) throws Exception;
+
 }

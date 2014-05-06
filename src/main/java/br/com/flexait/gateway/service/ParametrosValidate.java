@@ -9,8 +9,8 @@ import javax.validation.Validator;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import br.com.flexait.gateway.enums.EOperacao;
-import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
+import br.com.flexait.gateway.interfaces.AutorizacaoDiretaGroup;
+import br.com.flexait.gateway.interfaces.RegistroGroup;
 import br.com.flexait.gateway.interfaces.DefaultGroup;
 import br.com.flexait.gateway.interfaces.TIdGroup;
 import br.com.flexait.gateway.model.Parametros;
@@ -60,12 +60,28 @@ public class ParametrosValidate {
 	}
 
 	public boolean validateAutorizacaoGroup() {
-		messages = validator.validate(params, DefaultGroup.class, AutorizacaoGroup.class);
+		messages = validator.validate(params, DefaultGroup.class, RegistroGroup.class);
+		return validate(messages);
+	}
+	
+	public boolean validateAutorizacaoDiretaGroup() {
+		messages = validator.validate(params, DefaultGroup.class, AutorizacaoDiretaGroup.class);
 		return validate(messages);
 	}
 
 	public boolean validate() {
-		if(params.getOperacao() == EOperacao.AutorizacaoDireta) {
+		switch(params.getOperacao()) {
+		case Autorizacao:
+			break;
+		case AutorizacaoDireta:
+			return validateAutorizacaoDiretaGroup();
+		case Cancelamento:
+			break;
+		case Captura:
+			break;
+		case Consulta:
+			break;
+		case Registro:
 			return validateAutorizacaoGroup();
 		}
 		return validateTidGroup();

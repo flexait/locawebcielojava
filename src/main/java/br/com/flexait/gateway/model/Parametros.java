@@ -22,7 +22,8 @@ import br.com.flexait.gateway.enums.EIndicadorCartao;
 import br.com.flexait.gateway.enums.EModulo;
 import br.com.flexait.gateway.enums.EOperacao;
 import br.com.flexait.gateway.exception.GatewayException;
-import br.com.flexait.gateway.interfaces.AutorizacaoGroup;
+import br.com.flexait.gateway.interfaces.AutorizacaoDiretaGroup;
+import br.com.flexait.gateway.interfaces.RegistroGroup;
 import br.com.flexait.gateway.interfaces.DefaultGroup;
 import br.com.flexait.gateway.interfaces.TIdGroup;
 import br.com.flexait.gateway.util.DateUtil;
@@ -55,24 +56,24 @@ public class Parametros {
 	
 	private EIdioma idioma;
 	
-	@Min(value = 1, groups = AutorizacaoGroup.class, message = "{field} deve ser maior ou igual a {value}")
-	@NotNull(groups = AutorizacaoGroup.class)
+	@Min(value = 1, groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class}, message = "{field} deve ser maior ou igual a {value}")
+	@NotNull(groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class})
 	private Double valor; //dados do pedido
 	
-	@Min(value = 1L, groups = AutorizacaoGroup.class, message = "{field} deve ser maior ou igual a {value}")
-	@NotNull(groups = AutorizacaoGroup.class)
+	@Min(value = 1L, groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class}, message = "{field} deve ser maior ou igual a {value}")
+	@NotNull(groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class})
 	private Long pedido; //numero do pedido
 	
 	private String descricao;
 	
-	@NotNull(groups = AutorizacaoGroup.class)
+	@NotNull(groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class})
 	private EBandeira bandeira;
 	
-	@NotNull(groups = AutorizacaoGroup.class) 
+	@NotNull(groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class}) 
 	private EFormaPagamento formaPagamento;
 	
-	@Min(value = 1, groups = AutorizacaoGroup.class)
-	@NotNull(groups = AutorizacaoGroup.class)
+	@Min(value = 1, groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class})
+	@NotNull(groups = {AutorizacaoDiretaGroup.class, RegistroGroup.class})
 	private Integer parcelas;
 	
 	private EAutorizar autorizar;
@@ -81,36 +82,36 @@ public class Parametros {
 	
 	private String campoLivre;
 	
-	@NotEmpty(groups = AutorizacaoGroup.class)
+	@NotEmpty(groups = AutorizacaoDiretaGroup.class)
 	private String nomePortadorCartao;
 	
-	@Size(max = 16, min = 16, groups = AutorizacaoGroup.class) 
-	@NotEmpty(groups = AutorizacaoGroup.class) 
-	@Pattern(regexp = PATTERN_NUMERO_CARTAO, groups = AutorizacaoGroup.class) 
+	@Size(max = 16, min = 16, groups = AutorizacaoDiretaGroup.class) 
+	@NotEmpty(groups = AutorizacaoDiretaGroup.class) 
+	@Pattern(regexp = PATTERN_NUMERO_CARTAO, groups = AutorizacaoDiretaGroup.class) 
 	private String numeroCartao;
 	
-	@Size(max = 6, min = 6, groups = AutorizacaoGroup.class) 
-	@NotEmpty(groups = AutorizacaoGroup.class)
-	@Pattern(regexp = PATTERN_VALIDADE, groups = AutorizacaoGroup.class)
+	@Size(max = 6, min = 6, groups = AutorizacaoDiretaGroup.class) 
+	@NotEmpty(groups = AutorizacaoDiretaGroup.class)
+	@Pattern(regexp = PATTERN_VALIDADE, groups = AutorizacaoDiretaGroup.class)
 	private String validadeCartao;
 	
-	@NotNull(groups = AutorizacaoGroup.class)
+	@NotNull(groups = AutorizacaoDiretaGroup.class)
 	private EIndicadorCartao indicadorCartao;
 	
-	@Size(max = 3, min = 3, groups = AutorizacaoGroup.class)
-	@Pattern(regexp = PATTERN_CODIGO_SEGURANCA, groups = AutorizacaoGroup.class) 
+	@Size(max = 3, min = 3, groups = AutorizacaoDiretaGroup.class)
+	@Pattern(regexp = PATTERN_CODIGO_SEGURANCA, groups = AutorizacaoDiretaGroup.class) 
 	private String codigoSegurancaCartao;
 	
 	@NotEmpty(groups = TIdGroup.class)
 	private String tid;
 	
-	@AssertTrue(message = "{field} deve ser informado", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = "{field} deve ser informado", groups = AutorizacaoDiretaGroup.class)
 	public boolean isCodigoNotNullValid() {
 		return (indicadorCartao != EIndicadorCartao.Informado && bandeira == EBandeira.visa) ||
 				!Strings.isNullOrEmpty(codigoSegurancaCartao);
 	}
 	
-	@AssertTrue(message = "{field} não é válido", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = "{field} não é válido", groups = AutorizacaoDiretaGroup.class)
 	public boolean isNumeroCartaoValid() {
 		if(numeroCartao == null) {
 			return true;
@@ -127,7 +128,7 @@ public class Parametros {
 		return false;
 	}
 	
-	@AssertTrue(message = "{field} deve ser atual", groups = AutorizacaoGroup.class)
+	@AssertTrue(message = "{field} deve ser atual", groups = AutorizacaoDiretaGroup.class)
 	public boolean isValidadeCartaoValid() {
 		if(validadeCartao == null) {
 			return true;

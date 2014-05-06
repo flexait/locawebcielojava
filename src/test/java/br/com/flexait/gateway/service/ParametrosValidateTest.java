@@ -56,12 +56,12 @@ public class ParametrosValidateTest {
 		assertFalse("deve ser invalido", validate.validateDefaultGroup());
 	}
 	
-	@Test public void deveValidarAutorizacaoGroup() throws Exception {
+	@Test public void deveValidarAutorizacaoDiretaGroup() throws Exception {
 		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
 		parametros.setNumeroCartao(null);
 		
 		validate = ParametrosValidate.of(parametros);
-		assertFalse("deve retornar false com numero cartão nulo", validate.validateAutorizacaoGroup());
+		assertFalse("deve retornar false com numero cartão nulo", validate.validateAutorizacaoDiretaGroup());
 		
 		parametros = Parametros.of();
 		parametros.setIdentificacao(GatewayServiceTest.IDENTIFICACAO);
@@ -88,7 +88,36 @@ public class ParametrosValidateTest {
 		parametros.setValidadeCartao("200000");
 		
 		validate = ParametrosValidate.of(parametros);
-		assertFalse(validate.validateAutorizacaoGroup());
+		assertFalse(validate.validateAutorizacaoDiretaGroup());
+	}
+	
+	@Test public void deveValidarAutorizacaoGroup() throws Exception {
+		Parametros parametros = GatewayServiceTest.getParametrosRegistro();
+		parametros.setNumeroCartao(null);
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse("deve retornar false com numero cartão nulo", validate.validateAutorizacaoDiretaGroup());
+		
+		parametros = Parametros.of();
+		parametros.setIdentificacao(GatewayServiceTest.IDENTIFICACAO);
+		parametros.setModulo(EModulo.CIELO);
+		parametros.setOperacao(EOperacao.AutorizacaoDireta);
+		parametros.setAmbiente(EAmbiente.TESTE);
+		
+		parametros.setValor(10.0);
+		parametros.setPedido(1L);
+		parametros.setBandeira(EBandeira.visa);
+		parametros.setFormaPagamento(EFormaPagamento.CreditoAVista);
+		parametros.setParcelas(1);
+		
+		validate = ParametrosValidate.of(parametros);
+		
+		assertTrue("deve retornar true com os dados validos e codigo segurança null com ilegível", validate.validateAutorizacaoGroup());
+		
+		parametros.setValidadeCartao("200000");
+		
+		validate = ParametrosValidate.of(parametros);
+		assertFalse(validate.validateAutorizacaoDiretaGroup());
 	}
 	
 	@Test

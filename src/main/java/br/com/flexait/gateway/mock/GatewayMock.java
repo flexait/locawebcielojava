@@ -15,6 +15,7 @@ import br.com.flexait.gateway.xml.Parser;
 
 public class GatewayMock implements IGatewayService {
 	
+	public static final String RETORNO_URL = "https://qasecommerce.cielo.com.br/web/index.cbmp?id=d75b93d1edbc1a84fcf716ba727c4c5c";
 	private ParametrosValidate validate;
 
 	protected static Retorno OK() throws GatewayException, Exception {
@@ -28,42 +29,43 @@ public class GatewayMock implements IGatewayService {
 	}
 	
 	public static String getXmlTransacao() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>");
-		sb.append("<transacao versao=\"1.0.0\" id=\"1\" xmlns=\"http://ecommerce.cbmp.com.br\">");
-		sb.append("<tid>10017348980401201001</tid>");
-		sb.append("<dados-pedido>");
-		sb.append("<numero>1</numero>");
-		sb.append("<valor>101</valor>");
-		sb.append("<moeda>986</moeda>");
-		sb.append("<data-hora>2010-04-27T17:49:50.120-03:00</data-hora>");
-		sb.append("<descricao>Pedido de teste</descricao>");
-		sb.append("<idioma>PT</idioma>");
-		sb.append("</dados-pedido>");
-		sb.append("<forma-pagamento>");
-		sb.append("<bandeira>visa</bandeira>");
-		sb.append("<produto>1</produto>");
-		sb.append("<parcelas>1</parcelas>");
-		sb.append("</forma-pagamento>");
-		sb.append("<status>1</status>");
-		sb.append("<autenticacao>");
-		sb.append("<codigo>9</codigo>");
-		sb.append("<mensagem>Transacao sem autenticacao</mensagem>");
-		sb.append("<data-hora>2010-04-27T18:35:00.454-03:00</data-hora>");
-		sb.append("<valor>100</valor>");
-		sb.append("<eci>7</eci>");
-		sb.append("</autenticacao>");
-		sb.append("<autorizacao>");
-		sb.append("<codigo>9</codigo>");
-		sb.append("<mensagem>Transação autorizada</mensagem>");
-		sb.append("<data-hora>2010-04-27T18:35:00.502-03:00</data-hora>");
-		sb.append("<valor>100</valor>");
-		sb.append("<lr>00</lr>");
-		sb.append("<arp>183501</arp>");
-		sb.append("</autorizacao>");
-		sb.append("<url-autenticacao>https://qasecommerce.cielo.com.br/web/index.cbmp?id=d75b93d1edbc1a84fcf716ba727c4c5c</url-autenticacao>");
-		sb.append("</transacao>");
+		StringBuilder sb = new StringBuilder()
+			.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>")
+			.append("<transacao versao=\"1.0.0\" id=\"1\" xmlns=\"http://ecommerce.cbmp.com.br\">")
+			.append("<tid>10017348980401201001</tid>")
+			.append("<dados-pedido>")
+			.append("<numero>1</numero>")
+			.append("<valor>101</valor>")
+			.append("<moeda>986</moeda>")
+			.append("<data-hora>2010-04-27T17:49:50.120-03:00</data-hora>")
+			.append("<descricao>Pedido de teste</descricao>")
+			.append("<idioma>PT</idioma>")
+			.append("</dados-pedido>")
+			.append("<forma-pagamento>")
+			.append("<bandeira>visa</bandeira>")
+			.append("<produto>1</produto>")
+			.append("<parcelas>1</parcelas>")
+			.append("</forma-pagamento>")
+			.append("<status>1</status>")
+			.append("<autenticacao>")
+			.append("<codigo>9</codigo>")
+			.append("<mensagem>Transacao sem autenticacao</mensagem>")
+			.append("<data-hora>2010-04-27T18:35:00.454-03:00</data-hora>")
+			.append("<valor>100</valor>")
+			.append("<eci>7</eci>")
+			.append("</autenticacao>")
+			.append("<autorizacao>")
+			.append("<codigo>9</codigo>")
+			.append("<mensagem>Transação autorizada</mensagem>")
+			.append("<data-hora>2010-04-27T18:35:00.502-03:00</data-hora>")
+			.append("<valor>100</valor>")
+			.append("<lr>00</lr>")
+			.append("<arp>183501</arp>")
+			.append("</autorizacao>")
+			.append("<url-autenticacao>")
+			.append(RETORNO_URL)
+			.append("</url-autenticacao>")
+			.append("</transacao>");
 		
 		return sb.toString();
 	}
@@ -145,6 +147,12 @@ public class GatewayMock implements IGatewayService {
 
 	public static GatewayMock of() {
 		return new GatewayMock();
+	}
+
+	@Override
+	public Retorno registro(Parametros params) throws Exception {
+		params.setOperacao(EOperacao.Autorizacao);
+		return check(getPropertiesAndValidateTransacao(params));
 	}
 	
 }

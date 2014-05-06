@@ -238,8 +238,8 @@ public class GatewayService implements IGatewayService {
 		return post(params);
 	}
 
-	public Retorno autorizacao(Parametros params) throws GatewayException {
-		params.setOperacao(EOperacao.Autorizacao);
+	public Retorno registro(Parametros params) throws GatewayException {
+		params.setOperacao(EOperacao.Registro);
 		return post(params);
 	}
 
