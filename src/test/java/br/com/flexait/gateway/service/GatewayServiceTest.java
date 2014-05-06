@@ -118,6 +118,20 @@ public class GatewayServiceTest {
 		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
 	}
 	
+	@Test public void deveExecutarAutorizacao() throws GatewayException {
+		params.setOperacao(EOperacao.Autorizacao);
+		Retorno retorno = gatewayService.autorizacao(params);
+		assertNotNull("Deve retornar objeto deserializado", retorno.getTransacao());
+	}
+	
+	@Test
+	public void deveAutorizarTransacao() throws Exception {
+		Retorno retorno = gatewayService.autorizacao(params);
+		
+		assertEquals("Operação deve ser Autorizacao", EOperacao.Autorizacao, retorno.getOperacao());
+		assertNotNull("Deve retornar transação sem erro", retorno.getTransacao());
+	}
+	
 	@Test
 	public void deveConsultaTransacao() throws Exception {
 		Retorno retorno = gatewayService.consultar(params);
